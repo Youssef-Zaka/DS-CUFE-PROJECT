@@ -53,6 +53,7 @@ public:
 		{
 			return Head->getItem();
 		};
+		return nullptr;
 	}
 
 	void display()
