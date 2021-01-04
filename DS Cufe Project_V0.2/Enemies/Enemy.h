@@ -29,7 +29,7 @@ protected:
 	//
 	// TODO: Add More Data Members As Needed
 	//
-
+	const double OriginalHealth;
 public:
 	Enemy(int id, int arrTime, int d = MaxDistance);
 	Enemy(int id,int T, int ArvT, double H, double P, int RP, double S);
@@ -42,13 +42,14 @@ public:
 	double Enemy::GetPower()const;
 	int Enemy::GetReloadPeriod()const;
 	double Enemy::GetSpeed()const;
+	double Enemy::GetOriginalHealth()const;
 	/////////////////////////////////////////////
 	void Enemy::SetHealth(double);
 	void Enemy::SetPower(double);
 	void Enemy::SetSpeed(double);
-
 	/////////////////////////////////////////////
 	void DecrementDist();
+	void IncrementDist();
 	ENMY_STATUS GetStatus() const;
 	void SetStatus(ENMY_STATUS);
 	void SetDistance(int );
@@ -58,7 +59,7 @@ public:
 
 	// Virtual Functions: ----------------
 
-	//virtual void Move() = 0;	//All enemies can move
+	virtual void Move() = 0;	//All enemies can move
 	//virtual void Act() = 0;	//Acting means fighting or healing
 
 	//

@@ -19,7 +19,35 @@ void Battle::AddtoDemoList(Enemy* Ptr)
 	// Note that this function doesn't allocate any enemy objects
 	// It just enqueue a pointer that is already allocated into the queue
 }
-
+void Battle::AddtoActiveList(Enemy* Ptr)
+{
+	Q_Active.enqueue(Ptr);
+	ActiveCount++;
+}
+void Battle::AddtoFightersList(Enemy* Ptr)
+{
+	Q_Fighters.enqueue(Ptr);
+	FighterCount++;
+}
+void Battle::AddtoHealersList(Enemy* Ptr)
+{
+	S_Healers.push(Ptr);
+	HealerCount++;
+}void Battle::AddtoFreezersList(Enemy* Ptr)
+{
+	Q_Freezers.enqueue(Ptr);
+	FreezerCount++;
+}
+void Battle::AddtoFrostedList(Enemy* Ptr)
+{
+	Q_Frosted_List.enqueue(Ptr);
+	FrostedCount++;
+}
+void Battle::AddtoKilledList(Enemy* Ptr)
+{
+	Q_Killed_List.enqueue(Ptr);
+	KilledCount++;
+}
 
 Castle * Battle::GetCastle()
 {
@@ -57,49 +85,49 @@ void Battle::RunSimulation()
 //It should be removed in phases 1&2
 void Battle::Just_A_Demo()
 {	
-	
-	pGUI->PrintMessage("Just a Demo. Enter Enemies Count(next phases should read I/P filename):");
-	EnemyCount = atoi(pGUI->GetString().c_str());	//get user input as a string then convert to integer
-
-	pGUI->PrintMessage("Generating Enemies randomly... In next phases, Enemies should be loaded from a file...CLICK to continue");
-	pGUI->waitForClick();
-
-	CurrentTimeStep = 0;
-	//
-	// THIS IS JUST A DEMO Function
-	// IT SHOULD BE REMOVED IN PHASE 1 AND PHASE 2
-	//
-	 
-	srand(time(NULL));
-	int Enemy_id = 0;
-	int ArrivalTime=1;
-	Enemy* pE= NULL;
-	//Create Random enemies and add them all to inactive queue
-	for(int i=0; i<EnemyCount; i++)
-	{			
-		ArrivalTime += (rand()%3);	//Randomize arrival time
-		pE = new Enemy(++Enemy_id,ArrivalTime);
-		pE->SetStatus( INAC); //initiall all enemies are inactive
-		Q_Inactive.enqueue(pE);		//Add created enemy to inactive Queue
-	}	
-
-	AddAllListsToDrawingList();
-	pGUI->UpdateInterface(CurrentTimeStep);	//upadte interface to show the initial case where all enemies are still inactive
-
-	pGUI->waitForClick();
-	
-	while( KilledCount < EnemyCount )	//as long as some enemies are alive (should be updated in next phases)
-	{
-		CurrentTimeStep++;
-		ActivateEnemies();    
-
-		Demo_UpdateEnemies();	//Randomly update enemies distance/status (for demo purposes only)
-
-		pGUI->ResetDrawingList();
-		AddAllListsToDrawingList();
-		pGUI->UpdateInterface(CurrentTimeStep);
-		Sleep(250);
-	}		
+//	
+//	pGUI->PrintMessage("Just a Demo. Enter Enemies Count(next phases should read I/P filename):");
+//	EnemyCount = atoi(pGUI->GetString().c_str());	//get user input as a string then convert to integer
+//
+//	pGUI->PrintMessage("Generating Enemies randomly... In next phases, Enemies should be loaded from a file...CLICK to continue");
+//	pGUI->waitForClick();
+//
+//	CurrentTimeStep = 0;
+//	//
+//	// THIS IS JUST A DEMO Function
+//	// IT SHOULD BE REMOVED IN PHASE 1 AND PHASE 2
+//	//
+//	 
+//	srand(time(NULL));
+//	int Enemy_id = 0;
+//	int ArrivalTime=1;
+//	Enemy* pE= NULL;
+//	//Create Random enemies and add them all to inactive queue
+//	for(int i=0; i<EnemyCount; i++)
+//	{			
+//		ArrivalTime += (rand()%3);	//Randomize arrival time
+//		pE = new Enemy(++Enemy_id,ArrivalTime);
+//		pE->SetStatus( INAC); //initiall all enemies are inactive
+//		Q_Inactive.enqueue(pE);		//Add created enemy to inactive Queue
+//	}	
+//
+//	AddAllListsToDrawingList();
+//	pGUI->UpdateInterface(CurrentTimeStep);	//upadte interface to show the initial case where all enemies are still inactive
+//
+//	pGUI->waitForClick();
+//	
+//	while( KilledCount < EnemyCount )	//as long as some enemies are alive (should be updated in next phases)
+//	{
+//		CurrentTimeStep++;
+//		ActivateEnemies();    
+//
+//		Demo_UpdateEnemies();	//Randomly update enemies distance/status (for demo purposes only)
+//
+//		pGUI->ResetDrawingList();
+//		AddAllListsToDrawingList();
+//		pGUI->UpdateInterface(CurrentTimeStep);
+//		Sleep(250);
+//	}		
 }
 
 //Add enemy lists (inactive, active,.....) to drawing list to be displayed on user interface
@@ -115,8 +143,10 @@ void Battle::AddAllListsToDrawingList()
 	//TO DO
 	//In next phases, you should add enemies from different lists to the drawing list
 	//For the sake of demo, we will use DemoList
-	for(int i=0; i<DemoListCount; i++)
-		pGUI->AddToDrawingList(DemoList[i]);
+
+	int ActiveC = 0; //Variable to be passed by reference to toArray function, it stores queue size
+	for(int i=0; i<ActiveCount; i++)
+		pGUI->AddToDrawingList(Q_Active.toArray(ActiveC)[i]); //Adds ActiveList to DrawingList
 }
 
 //check the inactive list and activate all enemies that has arrived
@@ -130,7 +160,20 @@ void Battle::ActivateEnemies()
 				
 		Q_Inactive.dequeue(pE);	//remove enemy from the queue
 		pE->SetStatus(ACTV);	//make status active
-		AddtoDemoList(pE);		//move it to demo list (for demo purposes)
+		AddtoActiveList(pE);
+		if (pE->GetType() == 0)
+		{
+			AddtoFightersList(pE);
+		}
+		else if (pE->GetType() == 1)
+		{
+			AddtoHealersList(pE);
+		}
+		else if (pE->GetType() == 2)
+		{
+			AddtoFreezersList(pE);
+		}
+	
 	}
 }
 
@@ -185,6 +228,16 @@ void Battle::Demo_UpdateEnemies()
 		}
 	}
 }
+void Battle::UpdateEnemies() 
+{	
+	Enemy* Ep;
+	for (int i = 0; i < ActiveCount; i++)
+	{
+		Q_Active.dequeue(Ep);
+		Ep->Move();
+		Q_Active.enqueue(Ep);
+	}
+}
 
 void Battle::Silent_Mode()
 {
@@ -200,22 +253,26 @@ void Battle::Step_By_Step_Mode()
 
 	pGUI->waitForClick();
 
-	//while (KilledCount < EnemyCount)	//as long as some enemies are alive (should be updated in next phases)
-	//{
-	//	//CurrentTimeStep++;
-	//	//ActivateEnemies(); //TODO: Active List
-
-	//	//pGUI->ResetDrawingList();
-	//	//AddAllListsToDrawingList();
-	//	//pGUI->UpdateInterface(CurrentTimeStep);
-	//	//pGUI->waitForClick(); //THis is step by step, so we wait for click at each step
-
-	//}
+	while (KilledCount < EnemyCount)	//as long as some enemies are alive (should be updated in next phases)
+	{
+	CurrentTimeStep++;
+	ActivateEnemies();
+	UpdateEnemies();
+	pGUI->ResetDrawingList();
+	AddAllListsToDrawingList();
+	pGUI->UpdateInterface(CurrentTimeStep);
+	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
+	Sleep(100);
+	}
 }
 
 void Battle::InterActive_Mode()
 {
 	CurrentTimeStep = 0;
+}
+
+void Battle::Update_Enemies()
+{
 }
 
 

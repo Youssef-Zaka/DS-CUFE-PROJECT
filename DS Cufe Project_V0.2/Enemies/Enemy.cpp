@@ -1,13 +1,13 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(int id, int arrTime, int d):ID(id),ArrvTime(arrTime)
+Enemy::Enemy(int id, int arrTime, int d):ID(id),ArrvTime(arrTime),OriginalHealth(Health)
 {
 	SetDistance(d);
 }
 
 Enemy::Enemy(int id,int T, int ArvT, double H, double P, int RP, double S):ID(id),ArrvTime(ArvT),
-Health(H),Power(P),ReloadPeriod(RP),Speed(S),Type(T)
+Health(H),Power(P),ReloadPeriod(RP),Speed(S),Type(T),OriginalHealth(H)
 {
 	SetStatus(INAC);
 	SetDistance(MaxDistance);
@@ -45,6 +45,13 @@ void Enemy::DecrementDist()
 	if (Distance > MinDistance)
 		Distance--;
 }
+
+void Enemy::IncrementDist()  //Used With Healers as they go back an forth
+{
+	if (Distance < MaxDistance)
+		Distance++;
+}
+
 
 void Enemy::SetDistance(int d)
 {
@@ -84,6 +91,11 @@ int Enemy::GetReloadPeriod() const
 double Enemy::GetSpeed() const
 {
 	return Speed;
+}
+
+double Enemy::GetOriginalHealth() const
+{
+	return OriginalHealth;
 }
 
 void Enemy::SetHealth(double H)

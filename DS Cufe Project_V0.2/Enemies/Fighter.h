@@ -9,5 +9,7 @@ class Fighter :
 {
 public:
 	Fighter(int id, int T, int ArvT, double H, double P, int RP, double S);
+
+	void Move();
 };
 

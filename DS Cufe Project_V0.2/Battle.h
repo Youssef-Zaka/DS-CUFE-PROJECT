@@ -7,6 +7,7 @@
 #include "Castle\Castle.h"
 #include "Generic_DS\Queue.h"
 #include "GUI\GUI.h"
+#include "Generic_DS/Stack.h"
 #include <fstream>
 
 // it is the controller of the project
@@ -17,6 +18,7 @@ private:
 	Castle BCastle;
 	int EnemyCount;	//the actual number of enemies in the game
 	int ActiveCount, FrostedCount, KilledCount;	//no. of enemies (Active, Frosted, killed so far)
+	int FighterCount, HealerCount, FreezerCount;
 	int CurrentTimeStep;
 	//Enemy * BEnemiesForDraw[MaxEnemyCount]; // This Array of Pointers is used for drawing elements in the GUI
 								  			// No matter what list type you are using to hold enemies, 
@@ -26,8 +28,13 @@ private:
 											// then pass the pointers list to the GUI function
 
 	Queue<Enemy*> Q_Inactive;		//Queue of inactive enemies
+	Queue<Enemy*> Q_Active;		//Queue of active enemies
 
-
+	Queue<Enemy*> Q_Fighters; //Should be Priority Queue/////////////////////////////////////TODO
+	Queue<Enemy*> Q_Frosted_List; //Should be Priority Queue/////////////////////////////////TODO
+	Stack<Enemy*> S_Healers; //Stack if healers
+	Queue<Enemy*> Q_Freezers; //Queue of freezers
+	Queue<Enemy*> Q_Killed_List; //queue of killed enemies
 	/// ==> 
 	//	DEMO-related members. Should be removed in phases 1&2
 	//Queue for all enemies in the battle
@@ -51,8 +58,16 @@ public:
 
 		
 	void AddtoDemoList(Enemy* Ptr);		//Add Enemy to the demo queue of enemies (for demo purposes only)
+	void AddtoActiveList(Enemy* Ptr);
+	void AddtoFightersList(Enemy* Ptr);
+	void AddtoHealersList(Enemy* Ptr);
+	void AddtoFreezersList(Enemy* Ptr);
+	void AddtoFrostedList(Enemy* Ptr);
+	void AddtoKilledList(Enemy* Ptr);
 	void Just_A_Demo();	//just to show a demo and should be removed in phase1 1 & 2
 	void Demo_UpdateEnemies();	//Randomly update enemies distance/status (for demo purposes)
+
+	void UpdateEnemies();
 
 	//
 	// TODO: Add More Member Functions As Needed
@@ -61,8 +76,9 @@ public:
 	//Adding Functions for different game modes, silent, step by step and interactive
 	void Silent_Mode();
 	void Step_By_Step_Mode();
-	void InterActive_Mode();
-
+	void InterActive_Mode(); 
+	
+	void Update_Enemies();
 
 };
 
