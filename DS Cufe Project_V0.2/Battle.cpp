@@ -35,10 +35,13 @@ void Battle::RunSimulation()
 	switch (mode)	//Add a function for each mode in next phases
 	{
 	case MODE_INTR:
+		InterActive_Mode();
 		break;
 	case MODE_STEP:
+		Step_By_Step_Mode();
 		break;
 	case MODE_SLNT:
+		Silent_Mode();
 		break;
 	case MODE_DEMO:
 		Just_A_Demo();
@@ -88,7 +91,7 @@ void Battle::Just_A_Demo()
 	while( KilledCount < EnemyCount )	//as long as some enemies are alive (should be updated in next phases)
 	{
 		CurrentTimeStep++;
-		ActivateEnemies();
+		ActivateEnemies();    
 
 		Demo_UpdateEnemies();	//Randomly update enemies distance/status (for demo purposes only)
 
@@ -183,9 +186,44 @@ void Battle::Demo_UpdateEnemies()
 	}
 }
 
+void Battle::Silent_Mode()
+{
+	CurrentTimeStep = 0;
+}
+
+void Battle::Step_By_Step_Mode()
+{
+	CurrentTimeStep = 0; //reset time step 
+	getinput();			//Get Input from file
+	AddAllListsToDrawingList();	
+	pGUI->UpdateInterface(CurrentTimeStep);	//upadte interface to show the initial case where all enemies are still inactive
+
+	pGUI->waitForClick();
+
+	//while (KilledCount < EnemyCount)	//as long as some enemies are alive (should be updated in next phases)
+	//{
+	//	//CurrentTimeStep++;
+	//	//ActivateEnemies(); //TODO: Active List
+
+	//	//pGUI->ResetDrawingList();
+	//	//AddAllListsToDrawingList();
+	//	//pGUI->UpdateInterface(CurrentTimeStep);
+	//	//pGUI->waitForClick(); //THis is step by step, so we wait for click at each step
+
+	//}
+}
+
+void Battle::InterActive_Mode()
+{
+	CurrentTimeStep = 0;
+}
+
+
+//Kareem
+//Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
 {
-	fstream file("D:\\DS Cufe Project_V0.1\\input.txt");
+	fstream file("input.txt");
 	double ch;
 	int n, cp;
 	file >> ch;
@@ -196,6 +234,7 @@ void Battle::getinput()
 	BCastle.SetPower(cp);
 	int count;
 	file >> count;
+	EnemyCount = count;
 	int id, Type, AT, RLD;
 	double H, SPD,POW;
 	Enemy* eptr=NULL;
@@ -221,7 +260,7 @@ void Battle::getinput()
 		{
 			eptr = new Freezer(id, Type, AT, H, POW, RLD, SPD);
 		}
-
+		eptr->SetStatus(INAC);
 		Q_Inactive.enqueue(eptr);
 	}
 }

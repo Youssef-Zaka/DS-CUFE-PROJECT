@@ -49,7 +49,7 @@ public:
 	void ActivateEnemies();		//check the inactive list and activate all enemies that has arrived
 	void getinput();
 
-
+		
 	void AddtoDemoList(Enemy* Ptr);		//Add Enemy to the demo queue of enemies (for demo purposes only)
 	void Just_A_Demo();	//just to show a demo and should be removed in phase1 1 & 2
 	void Demo_UpdateEnemies();	//Randomly update enemies distance/status (for demo purposes)
@@ -57,5 +57,12 @@ public:
 	//
 	// TODO: Add More Member Functions As Needed
 	//
+	//ZAKA
+	//Adding Functions for different game modes, silent, step by step and interactive
+	void Silent_Mode();
+	void Step_By_Step_Mode();
+	void InterActive_Mode();
+
+
 };
 
