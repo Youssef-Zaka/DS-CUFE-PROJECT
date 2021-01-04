@@ -271,10 +271,10 @@ void GUI::AddToDrawingList(const Enemy* pE)
 	pDitem->distance = pE->GetDistance();
 	pDitem->region= (GUI_REGION) (pE->GetStatus());	//map status to drawing region	
 
-	// IMPORTANT [TO DO]
+	// IMPORTANT [TO DO] //DONE ZAKA / DIDNT USE DYNAMIC CASTING, WE ALREADY GET ENEMY TYPE FROM DATA MEMBER
 	// enemy type has been generated randomly here because enemy classes are not written yet
 	// in next phases, to know enemy type, you should apply dynamic_cast to pE pointer
-	int eType = pDitem->ID%ENMY_TYPE_CNT;	
+	int eType = pE->GetType();
 	pDitem->clr = DrawingColors[eType];
 	/////////////
 	/////////////
