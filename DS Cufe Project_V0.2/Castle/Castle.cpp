@@ -37,3 +37,13 @@ int Castle::GetAtkPerTurn() const
 {
 	return NumAtkPerTurn;
 }
+
+void Castle::SetisCastleFrosted(bool b)
+{
+	isCastleFrosted = b;
+}
+
+bool Castle::GetisCastleFrosted() const
+{
+	return isCastleFrosted;
+}
