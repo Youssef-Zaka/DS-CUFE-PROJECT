@@ -84,8 +84,11 @@ void GUI::PrintMessage(string CurrentTimeStep, string CastleHealth, string IsCas
 
 	pWind->SetPen(DARKRED);
 	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
-	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), CurrentTimeStep); 
-	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.4), "Castle Health: " + CastleHealth);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), "Current Time Step: "+ CurrentTimeStep); 
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.4), "Castle Health: " + CastleHealth + "               Is Castle Frosted? : " + IsCastleFrosted);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.7), "Active Fighters: " + CastleHealth + "  Active Healers: " + CastleHealth + "  Active Freezers: " + CastleHealth + "  Total: " + CastleHealth);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.1), "Frostd Fighters: " + CastleHealth + "  Frostd Healers: " + CastleHealth + "  Frostd Freezers: " + CastleHealth + "  Total: " + CastleHealth);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.8), "Killed  Fighters: " + CastleHealth + "  Killed  Healers: " + CastleHealth + "   Killed  Freezers: " + CastleHealth + "  Total: " + CastleHealth);
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 void GUI::DrawString(const int iX, const int iY, const string Text)
@@ -262,10 +265,18 @@ void GUI::UpdateStatusBar(int CurrentTimeStep,int CastleHealth,bool IsCastleFros
 		//print current timestep
 		char strTimestep[10];
 		itoa(CurrentTimeStep,strTimestep,10);
-		string strCastleHealth;
+		string strCastleHealth = to_string(CastleHealth);
+		string strIsCastleFrosted;
+		if (IsCastleFrosted)
+		{
+			strIsCastleFrosted = "yes";
+		}
+		else
+		{
+			strIsCastleFrosted = "No";
+		}
 		
-		strCastleHealth = to_string(CastleHealth);
-		PrintMessage(strTimestep, strCastleHealth, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep,
+		PrintMessage(strTimestep, strCastleHealth, strIsCastleFrosted, strTimestep, strTimestep, strTimestep, strTimestep,
 			strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep);
 }	
 

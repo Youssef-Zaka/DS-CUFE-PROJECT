@@ -283,7 +283,7 @@ void Battle::InterActive_Mode()
 		UpdateEnemies();
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
-		pGUI->UpdateInterface(CurrentTimeStep, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0,0,0,0);
+		pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(), 0, 0, 0, 0, 0, 0, 00, 0, 0, 0,0,0,0);
 		pGUI->waitForClick(); //THis is Interactive, so we wait for click
 		/*Sleep(100);*/
 	}
