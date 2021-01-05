@@ -66,6 +66,15 @@ int Enemy::GetDistance() const
 	return Distance;
 }
 
+double Enemy::GetPriority() const
+{
+	double DPS = Power / ReloadPeriod;
+	double HealthRatio = pow((OriginalHealth / Health), 2);;
+	double PreFrozenValues = (HealthRatio/Distance)*DPS;
+	double FrozenFactor = 1 / (1+FreezePeriod);
+	return PreFrozenValues * FrozenFactor;
+}
+
 
 
 int Enemy::GetArrvTime() const

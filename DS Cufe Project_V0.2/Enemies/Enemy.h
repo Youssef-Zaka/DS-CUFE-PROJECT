@@ -23,8 +23,7 @@ protected:
 	                //Always positive (ranges from 2 to 60)
 	
 
-	//ZAKA:: To be retrieved from input File 
-	
+	int FreezePeriod = 0;//Member used in priority calculations and in Frosted Checks, default value = 0	
 	ENMY_STATUS status;	    //status of the enemy (inactive, inactive, frosted, killed)
 	//
 	// TODO: Add More Data Members As Needed
@@ -55,7 +54,7 @@ public:
 	void SetDistance(int );
 	int GetDistance() const;
 	/////////////////////////////////////////////	
-
+	double GetPriority() const;
 
 	// Virtual Functions: ----------------
 
