@@ -268,7 +268,24 @@ void Battle::Step_By_Step_Mode()
 
 void Battle::InterActive_Mode()
 {
-	CurrentTimeStep = 0;
+	CurrentTimeStep = 0; //reset time step 
+	getinput();			//Get Input from file
+	AddAllListsToDrawingList();
+	pGUI->UpdateInterface(CurrentTimeStep);	//upadte interface to show the initial case where all enemies are still inactive
+
+	pGUI->waitForClick();
+
+	while (KilledCount < EnemyCount)	//as long as some enemies are alive (should be updated in next phases)
+	{
+		CurrentTimeStep++;
+		ActivateEnemies();
+		UpdateEnemies();
+		pGUI->ResetDrawingList();
+		AddAllListsToDrawingList();
+		pGUI->UpdateInterface(CurrentTimeStep);
+		pGUI->waitForClick(); //THis is Interactive, so we wait for click
+		/*Sleep(100);*/
+	}
 }
 
 void Battle::Update_Enemies()
