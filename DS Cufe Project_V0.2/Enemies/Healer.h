@@ -1,5 +1,5 @@
 #pragma once
-#include "Enemy.h"
+#include "Enemy.h" 
 
 ////ZAKA CREATED THIS//
 class Healer :
@@ -9,5 +9,6 @@ class Healer :
 public:
 	Healer(int id, int T, int ArvT, double H, double P, int RP, double S);
 	void Move();
+	void Act();
 };
 

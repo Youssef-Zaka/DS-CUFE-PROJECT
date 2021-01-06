@@ -24,3 +24,7 @@ void Freezer::Move()
 	}
 }
 
+void Freezer::Act()
+{
+}
+

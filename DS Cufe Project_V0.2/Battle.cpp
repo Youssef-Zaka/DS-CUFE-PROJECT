@@ -253,7 +253,7 @@ void Battle::Step_By_Step_Mode()
 
 	pGUI->waitForClick();
 
-	while (KilledCount < EnemyCount)	//as long as some enemies are alive (should be updated in next phases)
+	while (EnemyCount && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
 	{
 	CurrentTimeStep++;
 	ActivateEnemies();

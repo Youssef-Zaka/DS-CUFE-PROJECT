@@ -29,6 +29,7 @@ protected:
 	// TODO: Add More Data Members As Needed
 	//
 	const double OriginalHealth;
+	int CurrentReload;
 public:
 	Enemy(int id, int arrTime, int d = MaxDistance);
 	Enemy(int id,int T, int ArvT, double H, double P, int RP, double S);
@@ -59,7 +60,7 @@ public:
 	// Virtual Functions: ----------------
 
 	virtual void Move() = 0;	//All enemies can move
-	//virtual void Act() = 0;	//Acting means fighting or healing
+	virtual void Act() = 0;	//Acting means fighting or healing
 
 	//
 	// TODO: Add More Member Functions As Needed

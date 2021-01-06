@@ -11,6 +11,7 @@ Health(H),Power(P),ReloadPeriod(RP),Speed(S),Type(T),OriginalHealth(H)
 {
 	SetStatus(INAC);
 	SetDistance(MaxDistance);
+	CurrentReload = 0;
 }
 
 Enemy::~Enemy()

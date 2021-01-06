@@ -142,3 +142,7 @@ void Healer::Move()
 		}
 	}	
 }
+
+void Healer::Act()
+{
+}

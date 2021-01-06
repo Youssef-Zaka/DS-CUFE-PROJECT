@@ -24,3 +24,12 @@ void Fighter::Move()
 	}
 
 }
+
+void Fighter::Act()
+{
+	//if (ReloadPeriod == CurrentReload)
+	//{
+	//	CurrentReload = 0;
+	//	return;
+	//}
+}

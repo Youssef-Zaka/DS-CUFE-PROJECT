@@ -8,5 +8,6 @@ class Freezer :
 public:
 	Freezer(int id, int T, int ArvT, double H, double P, int RP, double S);
 	void Move();
+	void Act();
 };
 
