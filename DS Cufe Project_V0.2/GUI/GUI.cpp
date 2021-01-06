@@ -76,6 +76,20 @@ void GUI::PrintMessage(string msg) const	//Prints a message on status bar
 	pWind->DrawString(10, WindHeight - (int) (StatusBarHeight/1.2), msg); // You may need to change these coordinates later 
 	                                                                      // to be able to write multi-line
 }
+
+void GUI::PrintMessage(string CurrentTimeStep, string CastleHealth, string IsCastleFrosted, string NumActiveFighters, string NumActiveFreezers, string NumActiveHealers, string TotalActiveNum,
+	string NumFrozenFighters, string NumFrozenFreezers, string NumFrozenHealers, string TotalFrozenNum, string NumKilledFighters, string NumKilledFreezers, string NumKilledHealers, string TotalKilledNum) const	//Prints a message on status bar
+{
+	ClearStatusBar();	//First clear the status bar
+
+	pWind->SetPen(DARKRED);
+	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), "Current Time Step: "+ CurrentTimeStep); 
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.4), "Castle Health: " + CastleHealth + "               Is Castle Frosted? : " + IsCastleFrosted);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.7), "Active Fighters: " + CastleHealth + "  Active Healers: " + CastleHealth + "  Active Freezers: " + CastleHealth + "  Total: " + CastleHealth);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.1), "Frostd Fighters: " + CastleHealth + "  Frostd Healers: " + CastleHealth + "  Frostd Freezers: " + CastleHealth + "  Total: " + CastleHealth);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.8), "Killed  Fighters: " + CastleHealth + "  Killed  Healers: " + CastleHealth + "   Killed  Freezers: " + CastleHealth + "  Total: " + CastleHealth);
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 void GUI::DrawString(const int iX, const int iY, const string Text)
 {
@@ -241,21 +255,45 @@ void GUI::DrawAllItems()
 
 //prints info on status bar. 
 //Info includes timestep and other enemies info as illustrated in project doc
-void GUI::UpdateStatusBar(int CurrentTimeStep)	
+void GUI::UpdateStatusBar(int CurrentTimeStep,int CastleHealth,bool IsCastleFrosted, int NumActiveFighters, int NumActiveFreezers, int NumActiveHealers
+																				   , int TotalActiveNum
+																				   , int NumFrozenFighters, int NumFrozenFreezers, int NumFrozenHealers
+																				   , int TotalFrozenNum
+																				   , int NumKilledFighters, int NumKilledFreezers, int NumKilledHealers
+																				   , int TotalKilledNum)
 {
 		//print current timestep
 		char strTimestep[10];
-		string Extra = "\n		Castle Health:	" ; //ZAKA:: extra string containing other things to be printed
-		Extra += "		IsFrosted?= "; //ZAKA:: This appends Extra with a certain string, Other Appends are needed to be done as we go on
-		itoa(CurrentTimeStep,strTimestep,10);	
-		PrintMessage(strTimestep + Extra);
+		itoa(CurrentTimeStep,strTimestep,10);
+		string strCastleHealth = to_string(CastleHealth);
+		string strIsCastleFrosted;
+		if (IsCastleFrosted)
+		{
+			strIsCastleFrosted = "yes";
+		}
+		else
+		{
+			strIsCastleFrosted = "No";
+		}
 		
-}
+		PrintMessage(strTimestep, strCastleHealth, strIsCastleFrosted, strTimestep, strTimestep, strTimestep, strTimestep,
+			strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep);
+}	
 
-void GUI::UpdateInterface(int CurrentTimeStep) 
+void GUI::UpdateInterface(int CurrentTimeStep, int CastleHealth, bool IsCastleFrosted, int NumActiveFighters, int NumActiveFreezers, int NumActiveHealers
+																					 , int TotalActiveNum
+																					 , int NumFrozenFighters, int NumFrozenFreezers, int NumFrozenHealers
+																					 , int TotalFrozenNum
+																					 , int NumKilledFighters, int NumKilledFreezers, int NumKilledHealers
+																					 , int TotalKilledNum)
 {
 	ClearDrawingArea();
-	UpdateStatusBar(CurrentTimeStep);
+	UpdateStatusBar( CurrentTimeStep,  CastleHealth,  IsCastleFrosted,  NumActiveFighters,  NumActiveFreezers,  NumActiveHealers
+																	 ,  TotalActiveNum
+																     ,  NumFrozenFighters,  NumFrozenFreezers,  NumFrozenHealers
+																	 ,  TotalFrozenNum
+																	 ,  NumKilledFighters,  NumKilledFreezers,  NumKilledHealers
+																	 , TotalKilledNum);
 	DrawCastleArea();
 	DrawAllItems();
 }

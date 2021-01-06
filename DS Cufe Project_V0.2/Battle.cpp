@@ -249,7 +249,7 @@ void Battle::Step_By_Step_Mode()
 	CurrentTimeStep = 0; //reset time step 
 	getinput();			//Get Input from file
 	AddAllListsToDrawingList();	
-	pGUI->UpdateInterface(CurrentTimeStep);	//upadte interface to show the initial case where all enemies are still inactive
+	pGUI->UpdateInterface(CurrentTimeStep, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0,0,0,0);	//upadte interface to show the initial case where all enemies are still inactive
 
 	pGUI->waitForClick();
 
@@ -260,7 +260,7 @@ void Battle::Step_By_Step_Mode()
 	UpdateEnemies();
 	pGUI->ResetDrawingList();
 	AddAllListsToDrawingList();
-	pGUI->UpdateInterface(CurrentTimeStep);
+	pGUI->UpdateInterface(CurrentTimeStep,0,0,0,0,0,0,0,00,0,0,0,0,0,0);
 	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
 	Sleep(100);
 	}
@@ -271,7 +271,8 @@ void Battle::InterActive_Mode()
 	CurrentTimeStep = 0; //reset time step 
 	getinput();			//Get Input from file
 	AddAllListsToDrawingList();
-	pGUI->UpdateInterface(CurrentTimeStep);	//upadte interface to show the initial case where all enemies are still inactive
+	pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(),GetCastle()->GetisCastleFrosted(),
+						  0,0,0,0,0,0,0,0,0,0,0,0);	//upadte interface to show the initial case where all enemies are still inactive
 
 	pGUI->waitForClick();
 
@@ -282,7 +283,7 @@ void Battle::InterActive_Mode()
 		UpdateEnemies();
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
-		pGUI->UpdateInterface(CurrentTimeStep);
+		pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(), 0, 0, 0, 0, 0, 0, 00, 0, 0, 0,0,0,0);
 		pGUI->waitForClick(); //THis is Interactive, so we wait for click
 		/*Sleep(100);*/
 	}

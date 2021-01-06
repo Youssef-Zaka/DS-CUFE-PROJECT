@@ -91,18 +91,30 @@ private:
 public:
 	GUI();
 	~GUI();
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Input Functions  ---------------------------
 	void waitForClick() const;	// waits a user click from the user
 	string GetString() const ; // reads a string (keyboard input) from the user
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Output Functions  ---------------------------
 	void PrintMessage(string msg) const; // prints a message in the status bar
-	void UpdateStatusBar(int TimeStep);	//prints info on status bar. Info includes timestep and other enemies info as illustrated in project doc
-	void UpdateInterface(int TimeStep);
+	/////////Updates Ingame Status bar
+	void PrintMessage(string CurrentTimeStep, string CastleHealth, string IsCastleFrosted, string NumActiveFighters,
+		string NumActiveFreezers, string NumActiveHealers, string TotalActiveNum, string NumFrozenFighters, string NumFrozenFreezers,
+		string NumFrozenHealers, string TotalFrozenNum, string NumKilledFighters, string NumKilledFreezers, string NumKilledHealers, string TotalKilledNum) const;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////Update Status bar function
+	void UpdateStatusBar(int CurrentTimeStep, int CastleHealth, bool IsCastleFrosted, int NumActiveFighters, int NumActiveFreezers, int NumActiveHealers, int TotalActiveNum,
+		int NumFrozenFighters, int NumFrozenFreezers, int NumFrozenHealers, int TotalFrozenNum, int NumKilledFighters, int NumKilledFreezers, int NumKilledHealers , int TotalKilledNum);
+	/////////Update interface function
+	void UpdateInterface(int CurrentTimeStep, int CastleHealth, bool IsCastleFrosted, int NumActiveFighters, int NumActiveFreezers, int NumActiveHealers, int TotalActiveNum,
+		int NumFrozenFighters, int NumFrozenFreezers, int NumFrozenHealers, int TotalFrozenNum,  int NumKilledFighters, int NumKilledFreezers, int NumKilledHealers, int TotalKilledNum);/////////
+	//prints info on status bar. Info includes timestep and other enemies info as illustrated in project doc
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void AddToDrawingList(const Enemy*);	//Adds a new enemy to the drawing queue
 	void ResetDrawingList();		//resets drawing list (should be called every timestep after drawing)
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	PROG_MODE getGUIMode() const;			//returns the mode of the program
 
 };

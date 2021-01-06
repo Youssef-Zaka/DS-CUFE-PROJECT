@@ -304,6 +304,7 @@
     <ClInclude Include="Enemies\Freezer.h" />
     <ClInclude Include="Enemies\Healer.h" />
     <ClInclude Include="Generic_DS\Node.h" />
+    <ClInclude Include="Generic_DS\PQueue.h" />
     <ClInclude Include="Generic_DS\Queue.h" />
     <ClInclude Include="Generic_DS\Stack.h" />
     <ClInclude Include="GUI\GUI.h" />

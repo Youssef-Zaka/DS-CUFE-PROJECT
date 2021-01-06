@@ -12,6 +12,8 @@ class Castle
 	int NumAtkPerTurn; //ZAKA:: Number of enemies the castle may attack per turn, This value is retrieved from input file.
 	int CastlePower; // Castle Power retrived from input file.
 
+	bool isCastleFrosted = false;
+
 public:
 
 	void SetHealth(double h);
@@ -22,6 +24,10 @@ public:
 
 	void SetAtkPerTurn(int h);
 	int GetAtkPerTurn() const;
+
+
+	void SetisCastleFrosted(bool b);
+	bool GetisCastleFrosted() const;
 	//
 	// TODO: Add More Member Functions As Needed
 	//
