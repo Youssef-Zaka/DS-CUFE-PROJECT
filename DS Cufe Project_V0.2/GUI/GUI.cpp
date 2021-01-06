@@ -86,9 +86,9 @@ void GUI::PrintMessage(string CurrentTimeStep, string CastleHealth, string IsCas
 	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), "Current Time Step: "+ CurrentTimeStep); 
 	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.4), "Castle Health: " + CastleHealth + "               Is Castle Frosted? : " + IsCastleFrosted);
-	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.7), "Active Fighters: " + CastleHealth + "  Active Healers: " + CastleHealth + "  Active Freezers: " + CastleHealth + "  Total: " + CastleHealth);
-	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.1), "Frostd Fighters: " + CastleHealth + "  Frostd Healers: " + CastleHealth + "  Frostd Freezers: " + CastleHealth + "  Total: " + CastleHealth);
-	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.8), "Killed  Fighters: " + CastleHealth + "  Killed  Healers: " + CastleHealth + "   Killed  Freezers: " + CastleHealth + "  Total: " + CastleHealth);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.7), "Active Fighters: " + NumActiveFighters + "  Active Healers: " + NumActiveHealers + "  Active Freezers: " + NumActiveFreezers + "  Total: " + TotalActiveNum);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.1), "Frostd Fighters: " + NumFrozenFighters + "  Frostd Healers: " + NumFrozenHealers + "  Frostd Freezers: " + NumFrozenFreezers + "  Total: " + TotalFrozenNum);
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2.8), "Killed  Fighters: " + NumKilledFighters + "  Killed  Healers: " + NumKilledHealers + "   Killed  Freezers: " + NumKilledFreezers + "  Total: " + TotalKilledNum);
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 void GUI::DrawString(const int iX, const int iY, const string Text)
@@ -275,9 +275,20 @@ void GUI::UpdateStatusBar(int CurrentTimeStep,int CastleHealth,bool IsCastleFros
 		{
 			strIsCastleFrosted = "No";
 		}
-		
-		PrintMessage(strTimestep, strCastleHealth, strIsCastleFrosted, strTimestep, strTimestep, strTimestep, strTimestep,
-			strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep, strTimestep);
+		string strNumActiveFighters = to_string(NumActiveFighters);
+		string strNumActiveFreezers = to_string(NumActiveFreezers);
+		string strNumActiveHealers = to_string(NumActiveHealers);
+		string strTotalActiveNum = to_string(TotalActiveNum);
+		string strNumFrozenFighters = to_string(NumFrozenFighters);
+		string strNumFrozenFreezers = to_string(NumFrozenFreezers);
+		string strNumFrozenHealers = to_string(NumFrozenHealers);
+		string strTotalFrozenNum = to_string(TotalFrozenNum);
+		string strNumKilledFighters = to_string(NumKilledFighters);
+		string strNumKilledFreezers = to_string(NumKilledFreezers);
+		string strNumKilledHealers = to_string(NumKilledHealers);
+		string strTotalKilledNum = to_string(TotalKilledNum);
+		PrintMessage(strTimestep, strCastleHealth, strIsCastleFrosted, strNumActiveFighters, strNumActiveFreezers, strNumActiveHealers, strTotalActiveNum,
+			strNumFrozenFighters, strNumFrozenFreezers, strNumFrozenHealers, strTotalFrozenNum, strNumKilledFighters, strNumKilledFreezers, strNumKilledHealers, strTotalKilledNum);
 }	
 
 void GUI::UpdateInterface(int CurrentTimeStep, int CastleHealth, bool IsCastleFrosted, int NumActiveFighters, int NumActiveFreezers, int NumActiveHealers

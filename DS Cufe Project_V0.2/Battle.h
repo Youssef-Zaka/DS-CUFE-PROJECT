@@ -8,6 +8,7 @@
 #include "Generic_DS\Queue.h"
 #include "GUI\GUI.h"
 #include "Generic_DS/Stack.h"
+#include "Generic_DS/PQueue.h"
 #include <fstream>
 
 // it is the controller of the project
@@ -19,6 +20,8 @@ private:
 	int EnemyCount;	//the actual number of enemies in the game
 	int ActiveCount, FrostedCount, KilledCount;	//no. of enemies (Active, Frosted, killed so far)
 	int FighterCount, HealerCount, FreezerCount;
+	int FrozenFighterCount, FrozenHealerCount, FrozenFreezerCount;
+	int KilledFighterCount, KilledHealerCount, KilledFreezerCount;
 	int CurrentTimeStep;
 	//Enemy * BEnemiesForDraw[MaxEnemyCount]; // This Array of Pointers is used for drawing elements in the GUI
 								  			// No matter what list type you are using to hold enemies, 
@@ -30,8 +33,8 @@ private:
 	Queue<Enemy*> Q_Inactive;		//Queue of inactive enemies
 	Queue<Enemy*> Q_Active;		//Queue of active enemies
 
-	Queue<Enemy*> Q_Fighters; //Should be Priority Queue/////////////////////////////////////TODO
-	Queue<Enemy*> Q_Frosted_List; //Should be Priority Queue/////////////////////////////////TODO
+	PQueue<Enemy*> Q_Fighters; //Priority Queue
+	PQueue<Enemy*> Q_Frosted_List; //Priority Queue
 	Stack<Enemy*> S_Healers; //Stack if healers
 	Queue<Enemy*> Q_Freezers; //Queue of freezers
 	Queue<Enemy*> Q_Killed_List; //queue of killed enemies
@@ -69,6 +72,10 @@ public:
 
 	void UpdateEnemies();
 
+	void PrepareFighterPQ();
+	void PrepareFrozenPQ();
+	void EmptyFighterList();
+	void EmptyFreezerList();
 	//
 	// TODO: Add More Member Functions As Needed
 	//

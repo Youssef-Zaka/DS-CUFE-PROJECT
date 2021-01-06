@@ -1,5 +1,4 @@
-#ifndef __QUEUE_H_
-#define __QUEUE_H_
+#pragma once
 
 /*This code is an updated version from "Data Abstraction & Problem Solving with C++,WALLS AND MIRRORS ,SIXTH EDITION"*/
 
@@ -45,24 +44,20 @@ Single Node Case:
 #include "Node.h"
 
 template <typename T>
-class Queue
+class PQueue
 {
 private :
 	
 	Node<T>* backPtr;
 	Node<T>* frontPtr;
 public :
-	Queue();	
+	PQueue();
 	bool isEmpty() const ;
-	bool enqueue(const T& newEntry);
+	bool enqueue(const T& newEntry , double P);
 	bool dequeue(T& frntEntry);  
 	bool peekFront(T& frntEntry)  const;
 	
-	//toArray function to be used ONLY when drawing the queue items
-	const T* toArray(int& count);	//returns array of T (array of items)
-
-
-	~Queue();
+	~PQueue();
 };
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +68,7 @@ The constructor of the Queue class.
 */
 
 template <typename T>
-Queue<T>::Queue()
+PQueue<T>::PQueue()
 {
 	backPtr=nullptr;
 	frontPtr=nullptr;
@@ -89,7 +84,7 @@ Input: None.
 Output: True if the queue is empty; otherwise false.
 */
 template <typename T>
-bool Queue<T>::isEmpty() const
+bool PQueue<T>::isEmpty() const
 {
 	if(frontPtr==nullptr)
 		return true;
@@ -107,15 +102,30 @@ Output: True if the operation is successful; otherwise false.
 */
 
 template <typename T>
-bool Queue<T>::enqueue( const T& newEntry)
+bool PQueue<T>::enqueue( const T& newEntry , double P)
 {
 	Node<T>* newNodePtr = new Node<T>(newEntry);
+	newNodePtr->SetPriority(P);
+	Node<T>* StartNode = frontPtr;
 	// Insert the new node
-	if (isEmpty())
-		frontPtr = newNodePtr; // The queue is empty
-	else
-		backPtr->setNext(newNodePtr); // The queue was not empty
-	backPtr = newNodePtr; // New node is at back
+	if (isEmpty())// The queue is empty
+	{
+		frontPtr = newNodePtr;
+		return true;
+	}
+	// The queue was not empty
+	if (frontPtr->GetPriority() < P)
+	{
+		newNodePtr->setNext(frontPtr);
+		frontPtr = newNodePtr;
+		return true;
+	}
+	while (StartNode->getNext() && StartNode->getNext()->GetPriority() > P)
+	{
+		StartNode = StartNode->getNext();
+	}
+	newNodePtr->setNext(StartNode->getNext());
+	StartNode->setNext(newNodePtr);
 	return true ;
 } // end enqueue
 
@@ -131,7 +141,7 @@ Output: True if the operation is successful; otherwise false.
 */
 
 template <typename T>
-bool Queue<T>:: dequeue(T& frntEntry)  
+bool PQueue<T>:: dequeue(T& frntEntry)
 {
 	if(isEmpty())
 		return false;
@@ -162,7 +172,7 @@ Output: The front of the queue.
 return: flase if Queue is empty
 */
 template <typename T>
-bool Queue<T>:: peekFront(T& frntEntry) const 
+bool PQueue<T>:: peekFront(T& frntEntry) const
 {
 	if(isEmpty())
 		return false;
@@ -174,54 +184,8 @@ bool Queue<T>:: peekFront(T& frntEntry) const
 ///////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-Queue<T>::~Queue()
+PQueue<T>::~PQueue()
 {
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-Function: toArray
-returns an array of "T" 
-Output: count: the length of the returned array (zero if Queue is empty)
-returns: The array of T. (nullptr if Queue is empty)
-*/
-
-//IMPORTANT:
-//toArray function to be used ONLY when drawing the queue items
-
-template <typename T>
-const T* Queue<T>::toArray(int& count)
-{
-
-	//IMPORTANT:
-	//toArray function to be used ONLY when drawing the queue items
-
-	count=0;
-
-	if(!frontPtr)
-		return nullptr;
-	//counting the no. of items in the Queue
-	Node<T>* p = frontPtr;
-	while(p)
-	{
-		count++;
-		p = p->getNext();
-	}
-
-
-	T* Arr= new T[count];
-	p = frontPtr;
-	for(int i=0; i<count;i++)
-	{
-		Arr[i] = p->getItem();
-		p = p->getNext();
-	}
-	return Arr;
-	//IMPORTANT:
-	//toArray function to be used ONLY when drawing the queue items
-
-}
-
-#endif
