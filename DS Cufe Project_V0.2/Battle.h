@@ -73,9 +73,13 @@ public:
 	void UpdateEnemies();
 
 	void PrepareFighterPQ();
+	void PrepareHealerPQ();
+	void PrepareFreezerrPQ();
 	void PrepareFrozenPQ();
 	void EmptyFighterList();
+	void EmptyHealerList();
 	void EmptyFreezerList();
+	void EmptyFrozenList();
 	//
 	// TODO: Add More Member Functions As Needed
 	//
@@ -85,7 +89,8 @@ public:
 	void Step_By_Step_Mode();
 	void InterActive_Mode(); 
 	
-	void Update_Enemies();
+	///TODO UPDATE ACTIVE LIST WITH NEW DEATHS AND FREEZES EACH TURN
+	void PrepareActiveList();
 
 };
 

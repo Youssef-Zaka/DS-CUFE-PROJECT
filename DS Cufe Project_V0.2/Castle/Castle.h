@@ -1,9 +1,14 @@
 #pragma once
 #include "..\Defs.h"
+#include"..\Generic_DS\Queue.h"
+#include "..\Generic_DS\PQueue.h"
+#include "..\Generic_DS\Stack.h"
+#include "..\Enemies\Enemy.h"
+#include <time.h>
 class Castle
 {
 	double Health;
-	
+	double OriginalHealth;
 	//
 	// TODO: Add More Data Members As Needed
 	//
@@ -13,10 +18,13 @@ class Castle
 	int CastlePower; // Castle Power retrived from input file.
 
 	bool isCastleFrosted = false;
+	bool TurnToFreeze;
+	//bool HasCastleWon = false;
 
 public:
 
 	void SetHealth(double h);
+	void SetOriginalHealth(double h);
 	double GetHealth() const;
 
 	void SetPower(int h);
@@ -28,8 +36,14 @@ public:
 
 	void SetisCastleFrosted(bool b);
 	bool GetisCastleFrosted() const;
+	//bool GetHasCastleWon() const;
 	//
 	// TODO: Add More Member Functions As Needed
 	//
+
+	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, PQueue<Enemy*>& FrozenList, int fightercount, int healercount, int freezercount);
+	void CalculateTurnToFreeze();
+	void FreezeEnemies(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, PQueue<Enemy*>& FrozenList);
+	void DealDamage(Enemy*);
 };
 
