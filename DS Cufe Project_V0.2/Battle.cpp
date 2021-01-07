@@ -350,7 +350,7 @@ void Battle::Step_By_Step_Mode()
 
 	pGUI->waitForClick();
 	Enemy* Ep;
-	int battlestep = 0;
+	//int battlestep = 0;
 	while (((Q_Inactive.peekFront(Ep)) || ActiveCount>0) && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
 	{
 	CurrentTimeStep++;
@@ -365,12 +365,12 @@ void Battle::Step_By_Step_Mode()
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
 		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount);
 	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
-	Sleep(1);
-	battlestep++;
+	Sleep(100);
+	/*battlestep++;
 	if (battlestep == 500)
 	{
 		battlestep = 1;
-	}
+	}*/
 	}
 }
 
@@ -419,14 +419,17 @@ void Battle::PrepareActiveList()
 			if (Ep->GetType() == 0)
 			{
 				FighterCount--;
+				KilledFighterCount++;
 			}
 			else if (Ep->GetType() == 1)
 			{
 				HealerCount--;
+				KilledHealerCount++;
 			}
 			else
 			{
 				FreezerCount--;
+				KilledFreezerCount++;
 			}
 			ActiveCount--;
 			Ep->SetStatus(KILD);
