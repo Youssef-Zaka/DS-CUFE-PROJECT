@@ -72,6 +72,7 @@ public:
 
 	void UpdateEnemies();
 
+	void ProcessFrostedList();
 	void PrepareFighterPQ();
 	void PrepareHealerPQ();
 	void PrepareFreezerrPQ();

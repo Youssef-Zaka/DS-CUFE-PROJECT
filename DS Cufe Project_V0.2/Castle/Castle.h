@@ -43,7 +43,6 @@ public:
 
 	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, PQueue<Enemy*>& FrozenList, int fightercount, int healercount, int freezercount);
 	void CalculateTurnToFreeze();
-	void FreezeEnemies(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, PQueue<Enemy*>& FrozenList);
-	void DealDamage(Enemy*);
+	void DealDamage(Enemy*); //Responsible for damaging or freezing enemies
 };
 

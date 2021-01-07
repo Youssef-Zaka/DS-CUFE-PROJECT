@@ -30,6 +30,7 @@ protected:
 	//
 	const double OriginalHealth;
 	int CurrentReload;
+	int FreezeDuration;
 public:
 	Enemy(int id, int arrTime, int d = MaxDistance);
 	Enemy(int id,int T, int ArvT, double H, double P, int RP, double S);
@@ -56,7 +57,8 @@ public:
 	int GetDistance() const;
 	/////////////////////////////////////////////	
 	double GetPriority() const;
-
+	void SetFreezeDuration(int i);
+	int GetFreezeDuration();
 	// Virtual Functions: ----------------
 
 	virtual void Move() = 0;	//All enemies can move

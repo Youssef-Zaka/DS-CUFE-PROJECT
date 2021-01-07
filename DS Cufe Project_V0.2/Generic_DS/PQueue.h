@@ -56,8 +56,9 @@ public :
 	bool enqueue(const T& newEntry , double P);
 	bool dequeue(T& frntEntry);  
 	bool peekFront(T& frntEntry)  const;
-	
+	const T* toArray(int& count);
 	~PQueue();
+	
 };
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -189,3 +190,35 @@ PQueue<T>::~PQueue()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
+template <typename T>
+const T* PQueue<T>::toArray(int& count)
+{
+
+	//IMPORTANT:
+	//toArray function to be used ONLY when drawing the queue items
+
+	count = 0;
+
+	if (!frontPtr)
+		return nullptr;
+	//counting the no. of items in the Queue
+	Node<T>* p = frontPtr;
+	while (p)
+	{
+		count++;
+		p = p->getNext();
+	}
+
+
+	T* Arr = new T[count];
+	p = frontPtr;
+	for (int i = 0; i < count; i++)
+	{
+		Arr[i] = p->getItem();
+		p = p->getNext();
+	}
+	return Arr;
+	//IMPORTANT:
+	//toArray function to be used ONLY when drawing the queue items
+
+}

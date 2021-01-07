@@ -52,8 +52,8 @@ void Battle::AddtoFreezersList(Enemy* Ptr)
 }
 void Battle::AddtoFrostedList(Enemy* Ptr)
 {
-	/*Q_Frosted_List.enqueue(Ptr);
-	FrostedCount++;*/
+	Q_Frosted_List.enqueue(Ptr,Ptr->GetFreezeDuration());
+	FrostedCount++;
 }
 void Battle::AddtoKilledList(Enemy* Ptr)
 {
@@ -160,7 +160,9 @@ void Battle::AddAllListsToDrawingList()
 	for(int i=0; i<ActiveCount; i++)
 		pGUI->AddToDrawingList(Q_Active.toArray(ActiveC)[i]); //Adds ActiveList to DrawingList
 	for (int i = 0; i < KilledCount; i++)
-		pGUI->AddToDrawingList(Q_Killed_List.toArray(ActiveC)[i]); //Adds ActiveList to DrawingList
+		pGUI->AddToDrawingList(Q_Killed_List.toArray(ActiveC)[i]); //Adds Killed to DrawingList
+	for (int i = 0; i < FrostedCount; i++)
+		pGUI->AddToDrawingList(Q_Frosted_List.toArray(ActiveC)[i]); //Adds Frosted to DrawingList
 }
 
 //check the inactive list and activate all enemies that has arrived
@@ -251,6 +253,39 @@ void Battle::UpdateEnemies()
 		Ep->Move();
 		Ep->Act();
 		Q_Active.enqueue(Ep);
+	}
+}
+
+void Battle::ProcessFrostedList()
+{
+	Enemy* Ep;
+	int Freezeint = FrostedCount;
+	while (Freezeint)
+	{
+		Freezeint--;
+		Q_Frosted_List.dequeue(Ep);
+		Ep->SetFreezeDuration(Ep->GetFreezeDuration()-1);
+		if (Ep->GetFreezeDuration() <= 0)
+		{
+			Q_Active.enqueue(Ep);
+			ActiveCount++;
+			FrostedCount--;
+			if (Ep->GetType() == 0)
+			{
+				FrozenFighterCount--;
+			}
+			else if (Ep->GetType() == 1)
+			{
+				FrozenHealerCount--;
+			}
+			else
+			{
+				FrozenFreezerCount--;
+			}
+			Ep->SetStatus(ACTV);
+			continue;
+		}
+		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());
 	}
 }
 
@@ -351,13 +386,13 @@ void Battle::Step_By_Step_Mode()
 	pGUI->waitForClick();
 	Enemy* Ep;
 	//int battlestep = 0;
-	while (((Q_Inactive.peekFront(Ep)) || ActiveCount>0) && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
+	while (((Q_Inactive.peekFront(Ep)) || ActiveCount>0 || FrostedCount > 0) && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
 	{
 	CurrentTimeStep++;
 	ActivateEnemies();
-	PrepareActiveList();
 	UpdateEnemies();
 	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, Q_Frosted_List, FighterCount, HealerCount, FreezerCount);
+	PrepareActiveList();
 	pGUI->ResetDrawingList();
 	AddAllListsToDrawingList();
 	pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(), GetCastle()->GetisCastleFrosted(),
@@ -365,7 +400,7 @@ void Battle::Step_By_Step_Mode()
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
 		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount);
 	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
-	Sleep(100);
+	Sleep(1000);
 	/*battlestep++;
 	if (battlestep == 500)
 	{
@@ -436,12 +471,34 @@ void Battle::PrepareActiveList()
 			AddtoKilledList(Ep);
 			continue;
 		}
+		if (Ep->GetFreezeDuration() >0)
+		{
+			Ep->SetStatus(FRST);
+			if (Ep->GetType() == 0)
+			{
+				FighterCount--;
+				FrozenFighterCount++;
+			}
+			else if (Ep->GetType() == 1)
+			{
+				HealerCount--;
+				FrozenHealerCount++;
+			}
+			else
+			{
+				FreezerCount--;
+				FrozenFreezerCount++;
+			}
+			ActiveCount--;
+			AddtoFrostedList(Ep);
+			continue;
+		}
 		Q_Active.enqueue(Ep);
 	}
 	PrepareFighterPQ();
 	PrepareFreezerrPQ();
 	PrepareHealerPQ();
-
+	ProcessFrostedList();
 }
 
 

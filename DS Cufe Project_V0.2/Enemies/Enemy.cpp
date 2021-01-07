@@ -76,6 +76,16 @@ double Enemy::GetPriority() const
 	return PreFrozenValues * FrozenFactor;
 }
 
+void Enemy::SetFreezeDuration(int i)
+{
+	FreezeDuration = i;
+}
+
+int Enemy::GetFreezeDuration()
+{
+	return FreezeDuration;
+}
+
 
 
 int Enemy::GetArrvTime() const
