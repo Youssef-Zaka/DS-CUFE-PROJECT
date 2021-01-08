@@ -58,7 +58,7 @@ bool Castle::GetisCastleFrosted() const
 //	return HasCastleWon;
 //}
 
-void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList,PQueue<Enemy*>& FrozenList, int fightercount, int healercount, int freezercount)
+void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount)
 {
 	CalculateTurnToFreeze();
 	PQueue<Enemy*> TempFighterList;
@@ -166,8 +166,13 @@ void Castle::CalculateTurnToFreeze()
 void Castle::DealDamage(Enemy* Ep)
 {
 
+	
 	if (TurnToFreeze)
 	{
+		if (Ep->GetFreezeDuration() >0)
+		{
+			return;
+		}
 		double poweroverdistance = (double)CastlePower/Ep->GetDistance();
 		double Healthpercent = OriginalHealth / Health;
 		int random = rand() % 16;

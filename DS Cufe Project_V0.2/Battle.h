@@ -73,9 +73,7 @@ public:
 	void UpdateEnemies();
 
 	void ProcessFrostedList();
-	void PrepareFighterPQ();
-	void PrepareHealerPQ();
-	void PrepareFreezerrPQ();
+	void PrepareListsP_Q_S();
 	void PrepareFrozenPQ();
 	void EmptyFighterList();
 	void EmptyHealerList();

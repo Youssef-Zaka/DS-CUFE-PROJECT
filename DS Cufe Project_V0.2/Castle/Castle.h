@@ -41,7 +41,7 @@ public:
 	// TODO: Add More Member Functions As Needed
 	//
 
-	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, PQueue<Enemy*>& FrozenList, int fightercount, int healercount, int freezercount);
+	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount);
 	void CalculateTurnToFreeze();
 	void DealDamage(Enemy*); //Responsible for damaging or freezing enemies
 };

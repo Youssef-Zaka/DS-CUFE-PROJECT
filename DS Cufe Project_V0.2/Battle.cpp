@@ -289,9 +289,11 @@ void Battle::ProcessFrostedList()
 	}
 }
 
-void Battle::PrepareFighterPQ()
+void Battle::PrepareListsP_Q_S()
 {
 	EmptyFighterList();
+	EmptyFreezerList();
+	EmptyHealerList();
 	Enemy* Ep;
 	for (int i = 0; i < ActiveCount; i++)
 	{
@@ -300,35 +302,32 @@ void Battle::PrepareFighterPQ()
 		{
 			AddtoFightersList(Ep);
 		}
-		Q_Active.enqueue(Ep);
-	}
-}
-void Battle::PrepareHealerPQ()
-{
-	EmptyHealerList();
-	Enemy* Ep;
-	for (int i = 0; i < ActiveCount; i++)
-	{
-		Q_Active.dequeue(Ep);
-		if (Ep->GetType() == 1)
+		else if (Ep->GetType() == 1)
 		{
 			AddtoHealersList(Ep);
 		}
-		Q_Active.enqueue(Ep);
-	}
-}
-void Battle::PrepareFreezerrPQ()
-{
-	EmptyFreezerList();
-	Enemy* Ep;
-	for (int i = 0; i < ActiveCount; i++)
-	{
-		Q_Active.dequeue(Ep);
-		if (Ep->GetType() == 2)
+		else if (Ep->GetType() == 2)
 		{
 			AddtoFreezersList(Ep);
 		}
 		Q_Active.enqueue(Ep);
+	}
+	for (int i = 0; i < FrostedCount; i++)
+	{
+		Q_Frosted_List.dequeue(Ep);
+		if (Ep->GetType() == 0)
+		{
+			AddtoFightersList(Ep);
+		}
+		else if (Ep->GetType() == 1)
+		{
+			AddtoHealersList(Ep);
+		}
+		else if (Ep->GetType() == 2)
+		{
+			AddtoFreezersList(Ep);
+		}
+		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());
 	}
 }
 
@@ -391,7 +390,7 @@ void Battle::Step_By_Step_Mode()
 	CurrentTimeStep++;
 	ActivateEnemies();
 	UpdateEnemies();
-	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, Q_Frosted_List, FighterCount, HealerCount, FreezerCount);
+	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
 	PrepareActiveList();
 	pGUI->ResetDrawingList();
 	AddAllListsToDrawingList();
@@ -400,7 +399,7 @@ void Battle::Step_By_Step_Mode()
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
 		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount);
 	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
-	Sleep(1000);
+	Sleep(100);
 	/*battlestep++;
 	if (battlestep == 500)
 	{
@@ -428,7 +427,7 @@ void Battle::InterActive_Mode()
 		ActivateEnemies();
 		PrepareActiveList();
 		UpdateEnemies();
-		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, Q_Frosted_List, FighterCount, HealerCount, FreezerCount);
+		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -495,9 +494,38 @@ void Battle::PrepareActiveList()
 		}
 		Q_Active.enqueue(Ep);
 	}
-	PrepareFighterPQ();
-	PrepareFreezerrPQ();
-	PrepareHealerPQ();
+	int fortemp = FrostedCount;
+	for (int i = 0; i < fortemp; i++)
+	{
+		Q_Frosted_List.dequeue(Ep);
+		if (Ep->GetHealth() <= 0)
+		{
+			if (Ep->GetType() == 0)
+			{
+				FrostedCount--;
+				FrozenFighterCount--;
+				KilledFighterCount++;
+			}
+			else if (Ep->GetType() == 1)
+			{
+				FrostedCount--;
+				FrozenHealerCount--;
+				KilledHealerCount++;
+			}
+			else
+			{
+				FrostedCount--;
+				FrozenFreezerCount--;
+				KilledFreezerCount++;
+			}
+			ActiveCount--;
+			Ep->SetStatus(KILD);
+			AddtoKilledList(Ep);
+			continue;
+		}
+		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());
+	}
+	PrepareListsP_Q_S();
 	ProcessFrostedList();
 }
 
@@ -506,7 +534,7 @@ void Battle::PrepareActiveList()
 //Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
 {
-	fstream file("input.txt");
+	fstream file("test.txt");
 	double ch;
 	int n, cp;
 	file >> ch;
