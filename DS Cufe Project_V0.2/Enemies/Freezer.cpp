@@ -24,7 +24,7 @@ void Freezer::Move()
 	}
 }
 
-void Freezer::Act()
+void Freezer::Act(Castle*)
 {
 }
 

@@ -251,7 +251,7 @@ void Battle::UpdateEnemies()
 	{
 		Q_Active.dequeue(Ep);
 		Ep->Move();
-		Ep->Act();
+		Ep->Act(GetCastle());
 		Q_Active.enqueue(Ep);
 	}
 }

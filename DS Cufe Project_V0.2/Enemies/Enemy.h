@@ -2,6 +2,7 @@
 
 #include "..\Defs.h"
 #include "..\CMUgraphicsLib\CMUgraphics.h"
+class Castle;
 
 class GUI;
 // Enemy is the base class of each type of enemy
@@ -62,7 +63,7 @@ public:
 	// Virtual Functions: ----------------
 
 	virtual void Move() = 0;	//All enemies can move
-	virtual void Act() = 0;	//Acting means fighting or healing
+	virtual void Act(Castle*) = 0;	//Acting means fighting or healing
 
 	//
 	// TODO: Add More Member Functions As Needed

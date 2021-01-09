@@ -143,6 +143,6 @@ void Healer::Move()
 	}	
 }
 
-void Healer::Act()
+void Healer::Act(Castle*)
 {
 }
