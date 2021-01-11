@@ -390,7 +390,7 @@ void Battle::Step_By_Step_Mode()
 	CurrentTimeStep++;
 	ActivateEnemies();
 	UpdateEnemies();
-	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
+	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount,CurrentTimeStep);
 	PrepareActiveList();
 	pGUI->ResetDrawingList();
 	AddAllListsToDrawingList();
@@ -427,7 +427,7 @@ void Battle::InterActive_Mode()
 		ActivateEnemies();
 		PrepareActiveList();
 		UpdateEnemies();
-		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
+		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -467,6 +467,7 @@ void Battle::PrepareActiveList()
 			}
 			ActiveCount--;
 			Ep->SetStatus(KILD);
+			Ep->SetKTS(this->CurrentTimeStep);
 			AddtoKilledList(Ep);
 			continue;
 		}
@@ -520,6 +521,7 @@ void Battle::PrepareActiveList()
 			}
 			ActiveCount--;
 			Ep->SetStatus(KILD);
+			Ep->SetKTS(CurrentTimeStep);
 			AddtoKilledList(Ep);
 			continue;
 		}
@@ -575,5 +577,116 @@ void Battle::getinput()
 		}
 		eptr->SetStatus(INAC);
 		Q_Inactive.enqueue(eptr);
+	}
+}
+
+void Battle::CreateOutput()
+{
+	ofstream output("Output.txt");
+	string game = "Game is ";
+	if (IsGameWin == true)
+	{
+		game = game + "Win";
+	}
+	else
+	{
+		if (IsGameLoss == true)
+		{
+			game = game + "Loss";
+		}
+		else
+		{
+			game = game + "Drawn";
+		}
+	}
+
+	output << game << endl;
+	output << "KTS    ID     FD     KD     LT" << endl;
+
+	int KilledEnemies = KilledFighterCount + KilledFreezerCount + KilledHealerCount;
+
+	Queue<Enemy*> temp;
+	Enemy* eptr = nullptr;
+	int sumfirstshotdelay = 0;
+	int sumkilldelay = 0;
+	int id =0;
+	int KTS = 0;
+	int FD = 0;
+	int KD = 0;
+	int LT = 0;
+	int FSTS = 0;
+
+	while (!(Q_Killed_List.isEmpty()))
+	{
+		Q_Killed_List.dequeue(eptr);
+		KTS = eptr->GetKTS();
+		FSTS = eptr->GetFSTS();
+		FD = FSTS - (eptr->GetArrvTime());
+		KD = KTS - FSTS;
+		LT = FD + KD;
+		id = eptr->GetID();
+		sumfirstshotdelay = sumfirstshotdelay + FD;
+		sumkilldelay = sumkilldelay + KD;
+		temp.enqueue(eptr);
+		output << SetformatOutput(KTS) << SetformatOutput(id) << SetformatOutput(FD) << SetformatOutput(KD) << SetformatOutput(LT) << endl;
+	}
+
+	while (!(temp.isEmpty()))
+	{
+		temp.dequeue(eptr);
+		Q_Killed_List.enqueue(eptr);
+	}
+
+	double TotalCastleDamage = BCastle.GetOriginalHealth()-BCastle.GetHealth();
+	output << "Castle Total Damage = " << TotalCastleDamage << endl;
+
+	if (IsGameWin == true)
+	{
+		output << "Total Killed Enemies = " << KilledEnemies << endl;
+		output << "Average First-Shot delay = " << (sumfirstshotdelay / KilledEnemies) << endl;
+		output << "Average Kill Delay = " << (sumkilldelay / KilledEnemies) << endl;
+		return;
+	}
+	else
+	{
+		output << "Total Killed Enemies = " << KilledEnemies << endl;
+		output << "Total Alive Enemies = " << (EnemyCount - KilledEnemies) << endl;
+		output << "Average First-Shot delay for killed enemies = " << (sumfirstshotdelay / KilledEnemies) << endl;
+		output << "Average Kill Delay for killed enemies = " << (sumkilldelay / KilledEnemies) << endl;
+		return;
+	}
+}
+
+string Battle::SetformatOutput(int x)
+{
+	string r;
+	r = to_string(x);
+	if (x < 10)
+	{
+		return r + "      ";
+	}
+	if (x < 100)
+	{
+		return r + "     ";
+	}
+	if (x < 1000)
+	{
+		return r + "    ";
+	}
+	if (x < 10000)
+	{
+		return r + "   ";
+	}
+	if (x < 100000)
+	{
+		return r + "  ";
+	}
+	if (x < 1000000)
+	{
+		return r + " ";
+	}
+	if (x < 10000000)
+	{
+		return r + "";
 	}
 }

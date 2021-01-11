@@ -58,7 +58,7 @@ bool Castle::GetisCastleFrosted() const
 //	return HasCastleWon;
 //}
 
-void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount)
+void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount,int timestep)
 {
 	CalculateTurnToFreeze();
 	PQueue<Enemy*> TempFighterList;
@@ -84,7 +84,7 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 	while (WhileTemp)
 	{
 		TempFighterList.dequeue(Ep);
-		DealDamage(Ep);
+		DealDamage(Ep,timestep);
 		FighterList.enqueue(Ep, Ep->GetPriority());	
 		WhileTemp--;
 	}
@@ -103,7 +103,7 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 		{
 			Ep = HealerList.peek();
 			HealerList.pop();
-			DealDamage(Ep);
+			DealDamage(Ep,timestep);
 			if (Ep->GetHealth() <= 0)
 			{
 				if (Ep->GetDistance() <= 5)
@@ -145,7 +145,7 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 		while (FreezerRemain)
 		{
 			TempFreezerList.dequeue(Ep);
-			DealDamage(Ep);
+			DealDamage(Ep,timestep);
 			FreezerList.enqueue(Ep);
 			FreezerRemain--;
 		}
@@ -163,10 +163,8 @@ void Castle::CalculateTurnToFreeze()
 	TurnToFreeze = !TurnToFreeze;
 }
 
-void Castle::DealDamage(Enemy* Ep)
+void Castle::DealDamage(Enemy* Ep, int timestep)
 {
-
-	
 	if (TurnToFreeze)
 	{
 		if (Ep->GetFreezeDuration() >0)
@@ -187,6 +185,10 @@ void Castle::DealDamage(Enemy* Ep)
 			return;
 		}
 		Ep->SetFreezeDuration(freezeDuration);
+		if (Ep->GetFSTS() > timestep)
+		{
+			Ep->SetFSTS(timestep);
+		}
 		return;
 	}
 	double K;
@@ -200,5 +202,14 @@ void Castle::DealDamage(Enemy* Ep)
 	}
 	double DamageDealt =(double)((double)CastlePower / Ep->GetDistance()) * (1/K);
 	Ep->SetHealth(Ep->GetHealth() - DamageDealt);
+	if (Ep->GetFSTS() > timestep)
+	{
+		Ep->SetFSTS(timestep);
+	}
 	return;
+}
+
+double Castle::GetOriginalHealth()
+{
+	return OriginalHealth;
 }

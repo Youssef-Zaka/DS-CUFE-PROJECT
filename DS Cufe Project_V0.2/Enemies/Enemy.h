@@ -32,6 +32,8 @@ protected:
 	const double OriginalHealth;
 	int CurrentReload;
 	int FreezeDuration;
+	int KillTimeStep;   // used in output calculation
+	int FirstshotTimeStep = 1000000000;  // used in output calculation
 public:
 	Enemy(int id, int arrTime, int d = MaxDistance);
 	Enemy(int id,int T, int ArvT, double H, double P, int RP, double S);
@@ -60,6 +62,12 @@ public:
 	double GetPriority() const;
 	void SetFreezeDuration(int i);
 	int GetFreezeDuration();
+
+	void SetKTS(int);        // setters and getters for first shot time step and kill time step
+	int GetKTS();
+	void SetFSTS(int);
+	int GetFSTS();
+	
 	// Virtual Functions: ----------------
 
 	virtual void Move() = 0;	//All enemies can move

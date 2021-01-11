@@ -132,3 +132,29 @@ void Enemy::SetSpeed(double S)
 {
 	Speed = S;
 }
+
+void Enemy::SetKTS(int x)
+{
+	KillTimeStep = x;
+}
+
+void Enemy::SetFSTS(int x)
+{
+	FirstshotTimeStep = x;
+}
+
+int Enemy::GetKTS()
+{
+	return KillTimeStep;
+}
+
+int Enemy::GetFSTS()
+{
+	return FirstshotTimeStep;
+}
+
+
+
+
+
+

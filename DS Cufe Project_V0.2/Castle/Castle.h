@@ -26,6 +26,7 @@ public:
 	void SetHealth(double h);
 	void SetOriginalHealth(double h);
 	double GetHealth() const;
+	double GetOriginalHealth();
 
 	void SetPower(int h);
 	int GetPower() const;
@@ -41,8 +42,8 @@ public:
 	// TODO: Add More Member Functions As Needed
 	//
 
-	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount);
+	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount, int timestep);
 	void CalculateTurnToFreeze();
-	void DealDamage(Enemy*); //Responsible for damaging or freezing enemies
+	void DealDamage(Enemy*,int); //Responsible for damaging or freezing enemies
 };
 
