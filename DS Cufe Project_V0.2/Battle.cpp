@@ -536,20 +536,20 @@ void Battle::PrepareActiveList()
 //Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
 {
-	fstream file("test.txt");
+	fstream file("test.txt");    // setting input file
 	double ch;
 	int n, cp;
-	file >> ch;
-	file >> n;
-	file >> cp;
+	file >> ch;  // retreiving castle health from input file
+	file >> n;   // retreiving castle attacks from input file
+	file >> cp;  // retreiving castle power from input file
 	BCastle.SetHealth(ch);
-	BCastle.SetOriginalHealth(ch);
-	BCastle.SetAtkPerTurn(n);
-	BCastle.SetPower(cp);
+	BCastle.SetOriginalHealth(ch);    // setting castle health by value obtained from input file
+	BCastle.SetAtkPerTurn(n);         // setting castle attacks by value obtained from input file
+	BCastle.SetPower(cp);             // setting castle power by value obtained from input file
 	int count;
-	file >> count;
+	file >> count;    // retreiving total nu,ber of enemies
 	EnemyCount = count;
-	int id, Type, AT, RLD;
+	int id, Type, AT, RLD;  // declaring variables that hold enemies info
 	double H, SPD,POW;
 	Enemy* eptr=NULL;
 	for (int i = 0; i < count; i++)
@@ -560,52 +560,52 @@ void Battle::getinput()
 		file >> H;
 		file >> POW;
 		file >> RLD;
-		file >> SPD;
+		file >> SPD;      // retreiving enemy info from input file and setting the info to its respective variable
 
 		if (Type == 0)
 		{
-			eptr = new Fighter(id, Type, AT, H, POW, RLD, SPD);
+			eptr = new Fighter(id, Type, AT, H, POW, RLD, SPD);     // creating a new fighter based on info retreived from input file
 		}
 		else if (Type == 1)
 		{
-			eptr = new Healer(id, Type, AT, H, POW, RLD, SPD);
+			eptr = new Healer(id, Type, AT, H, POW, RLD, SPD);      // creating a new healer based on info retreived from input file
 		}
 		else
 		{
 			Type = 2;
-			eptr = new Freezer(id, Type, AT, H, POW, RLD, SPD);
+			eptr = new Freezer(id, Type, AT, H, POW, RLD, SPD);     // creating a new fighter based on info retreived from input file
 		}
-		eptr->SetStatus(INAC);
-		Q_Inactive.enqueue(eptr);
+		eptr->SetStatus(INAC);   // setting newly created enemy to be inactive
+		Q_Inactive.enqueue(eptr);  // adding newly created enemy to inactive list
 	}
 }
 
 void Battle::CreateOutput()
 {
-	ofstream output("Output.txt");
+	ofstream output("Output.txt");   // setting output file
 	string game = "Game is ";
 	if (IsGameWin == true)
 	{
-		game = game + "Win";
+		game = game + "Win";      //creating game is win string if game was won
 	}
 	else
 	{
-		if (IsGameLoss == true)
+		if (IsGameLoss == true)       
 		{
-			game = game + "Loss";
+			game = game + "Loss";    //creating game is loss string if game was loss
 		}
 		else
 		{
-			game = game + "Drawn";
+			game = game + "Drawn";   // if game was neither win nor loss then it is drawn 
 		}
 	}
 
-	output << game << endl;
-	output << "KTS    ID     FD     KD     LT" << endl;
+	output << game << endl;         // adding game is string to output file
+	output << "KTS    ID     FD     KD     LT" << endl;       // adding required layout as instructed in project document 
 
-	int KilledEnemies = KilledFighterCount + KilledFreezerCount + KilledHealerCount;
+	int KilledEnemies = KilledFighterCount + KilledFreezerCount + KilledHealerCount;  // getting number of killed enemies
 
-	Queue<Enemy*> temp;
+	Queue<Enemy*> temp;       // declaring variables that will hold enemy info to then be added to output file
 	Enemy* eptr = nullptr;
 	int sumfirstshotdelay = 0;
 	int sumkilldelay = 0;
@@ -616,7 +616,7 @@ void Battle::CreateOutput()
 	int LT = 0;
 	int FSTS = 0;
 
-	while (!(Q_Killed_List.isEmpty()))
+	while (!(Q_Killed_List.isEmpty()))     // as long as killed queue has enemies each enemy is dequeued and info required about enemies is set to their respective variables previously created 
 	{
 		Q_Killed_List.dequeue(eptr);
 		KTS = eptr->GetKTS();
@@ -625,39 +625,39 @@ void Battle::CreateOutput()
 		KD = KTS - FSTS;
 		LT = FD + KD;
 		id = eptr->GetID();
-		sumfirstshotdelay = sumfirstshotdelay + FD;
-		sumkilldelay = sumkilldelay + KD;
-		temp.enqueue(eptr);
-		output << SetformatOutput(KTS) << SetformatOutput(id) << SetformatOutput(FD) << SetformatOutput(KD) << SetformatOutput(LT) << endl;
+		sumfirstshotdelay = sumfirstshotdelay + FD;   // at end of loop will contain sum of first shot delay of enemies
+		sumkilldelay = sumkilldelay + KD;    // at end of loop will contain sum of kill delay of enemies
+		temp.enqueue(eptr);      // enqueuing enemies in a temp queue 
+		output << SetformatOutput(KTS) << SetformatOutput(id) << SetformatOutput(FD) << SetformatOutput(KD) << SetformatOutput(LT) << endl; // adding each enemy info to output file and using setformatoutput to ensure table structure for enemy info in output file
 	}
 
 	while (!(temp.isEmpty()))
 	{
 		temp.dequeue(eptr);
-		Q_Killed_List.enqueue(eptr);
+		Q_Killed_List.enqueue(eptr);  // returning enemy pointers to killed queue
 	}
 
-	double TotalCastleDamage = BCastle.GetOriginalHealth()-BCastle.GetHealth();
-	output << "Castle Total Damage = " << TotalCastleDamage << endl;
+	double TotalCastleDamage = BCastle.GetOriginalHealth()-BCastle.GetHealth();    // calculating total castle damage by obtaining its original hp and current hp 
+	output << "Castle Total Damage = " << TotalCastleDamage << endl;   // adding castle damage to output file 
 
-	if (IsGameWin == true)
+	if (IsGameWin == true)     // adding required info incase game was won or loss/drawn 
 	{
 		output << "Total Killed Enemies = " << KilledEnemies << endl;
-		output << "Average First-Shot delay = " << (sumfirstshotdelay / KilledEnemies) << endl;
+		output << "Average First-Shot delay = " << (sumfirstshotdelay / KilledEnemies) << endl; // getting average by dividing sum and number of enemies that contributed to sum
 		output << "Average Kill Delay = " << (sumkilldelay / KilledEnemies) << endl;
 		return;
 	}
 	else
 	{
 		output << "Total Killed Enemies = " << KilledEnemies << endl;
-		output << "Total Alive Enemies = " << (EnemyCount - KilledEnemies) << endl;
+		output << "Total Alive Enemies = " << (EnemyCount - KilledEnemies) << endl;  // calculating active by subtracting killed from total enemy count
 		output << "Average First-Shot delay for killed enemies = " << (sumfirstshotdelay / KilledEnemies) << endl;
 		output << "Average Kill Delay for killed enemies = " << (sumkilldelay / KilledEnemies) << endl;
 		return;
 	}
 }
 
-string Battle::SetformatOutput(int x)
+string Battle::SetformatOutput(int x)  // returns a string that maintains table format for enemy info in output file 
 {
 	string r;
 	r = to_string(x);
