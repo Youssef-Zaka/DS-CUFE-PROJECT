@@ -24,7 +24,7 @@ class Castle
 	double FreezeThresh = 500;
 	double CurrentThresh = 0;
 public:
-
+	//setters and getters
 	void SetHealth(double h);
 	void SetOriginalHealth(double h);
 	double GetHealth() const;
@@ -39,10 +39,7 @@ public:
 
 	void SetisCastleFrosted(bool b);
 	bool GetisCastleFrosted() const;
-	//bool GetHasCastleWon() const;
-	//
-	// TODO: Add More Member Functions As Needed
-	//
+
 
 	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount, int timestep);
 	void CalculateTurnToFreeze();

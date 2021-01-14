@@ -53,14 +53,12 @@ bool Castle::GetisCastleFrosted() const
 	return isCastleFrosted;
 }
 
-//bool Castle::GetHasCastleWon() const
-//{
-//	return HasCastleWon;
-//}
+
 
 void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount,int timestep)
 {
-	CalculateTurnToFreeze();
+	CalculateTurnToFreeze();		
+	//Some temporary Queus and stacks used in the dealing damage process
 	PQueue<Enemy*> TempFighterList;
 	Stack<Enemy*> TempHealerList;
 	Queue<Enemy*> TempFreezerList;
@@ -70,18 +68,18 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 	int FreezerRemain = 0;
 	while (FighterList.dequeue(Ep))
 	{
-		TempFighterList.enqueue(Ep, Ep->GetPriority());
+		TempFighterList.enqueue(Ep, Ep->GetPriority());	//fill temporary fighter list with original fighter lsit
 	}
 	if (fightercount>= NumAtkPerTurn)
 	{
-		WhileTemp = NumAtkPerTurn;
+		WhileTemp = NumAtkPerTurn;		//a temp used in while loop
 	}
 	else
 	{
 		HealerRemain = NumAtkPerTurn - fightercount;
-		WhileTemp = fightercount;
+		WhileTemp = fightercount;					//calculated reamining castle attacks after hitting fighters
 	}
-	while (WhileTemp)
+	while (WhileTemp)			//deal damage to fighters and return all back to fighter list
 	{
 		TempFighterList.dequeue(Ep);
 		DealDamage(Ep,timestep);
@@ -90,16 +88,16 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 	}
 	while (TempFighterList.dequeue(Ep))
 	{
-		FighterList.enqueue(Ep, Ep->GetPriority());
+		FighterList.enqueue(Ep, Ep->GetPriority());		
 	}
-	if (HealerRemain)
+	if (HealerRemain)		//if there is still N remaining, hit healers
 	{
-		if (healercount < HealerRemain)
+		if (healercount < HealerRemain)		//calculate remaining healer hits, and if there was freezer hits
 		{
 			FreezerRemain = HealerRemain - healercount;
 			HealerRemain = healercount;
 		}
-		while (HealerRemain)
+		while (HealerRemain)			//pop healer, hit him, then pop him in temp stack
 		{
 			Ep = HealerList.peek();
 			HealerList.pop();
@@ -118,23 +116,23 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 			TempHealerList.push(Ep);
 			HealerRemain--;
 		}
-		while (!HealerList.isEmpty())
+		while (!HealerList.isEmpty())			//continue with remaining not hit healers if any
 		{
 			Ep = HealerList.peek();
 			HealerList.pop();
 			TempHealerList.push(Ep);
 		}
 
-		while (!TempHealerList.isEmpty())
+		while (!TempHealerList.isEmpty())//pop back from temp to main again, retaining order
 		{	
 			Ep = TempHealerList.peek();
 			TempHealerList.pop();
 			HealerList.push(Ep);
 		}
 	}
-	if (FreezerRemain)
+	if (FreezerRemain)		//check if N not exhausted yet, hit freezers
 	{
-		while (FreezerList.dequeue(Ep))
+		while (FreezerList.dequeue(Ep))		//dequeu to temp
 		{
 			TempFreezerList.enqueue(Ep);
 		}
@@ -142,45 +140,45 @@ void Castle::AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList
 		{
 			FreezerRemain = freezercount;
 		}
-		while (FreezerRemain)
+		while (FreezerRemain)		//deal damage 
 		{
 			TempFreezerList.dequeue(Ep);
 			DealDamage(Ep,timestep);
 			FreezerList.enqueue(Ep);
 			FreezerRemain--;
 		}
-		while (TempFreezerList.dequeue(Ep))
+		while (TempFreezerList.dequeue(Ep))		//return back to original list
 		{
 			FreezerList.enqueue(Ep);
 		}
 	}
 }
 
-void Castle::CalculateTurnToFreeze()
+void Castle::CalculateTurnToFreeze()	//Randomizes freeze turn with 20% probability
 {
 	int Random = rand() % 6;
 	TurnToFreeze = Random;
 	TurnToFreeze = !TurnToFreeze;
 }
 
-void Castle::DealDamage(Enemy* Ep, int timestep)
+void Castle::DealDamage(Enemy* Ep, int timestep) //utility function used to deal damage, or freeze enemies 
 {
-	if (TurnToFreeze)
+	if (TurnToFreeze)		//if turn to freeze
 	{
-		if (Ep->GetFreezeDuration() >0)
+		if (Ep->GetFreezeDuration() >0)		//if already frozen return
 		{
 			return;
 		}
 		double poweroverdistance = (double)CastlePower/Ep->GetDistance();
 		double Healthpercent = OriginalHealth / Health;
 		int random = rand() % 16;
-		int freezeDuration = poweroverdistance * Healthpercent * random;
+		int freezeDuration = poweroverdistance * Healthpercent * random;	//calculate freeze duration, some random elements are used to simulate weather conditions
 		if (Ep->GetDistance() < 10)
 		{
 			int r = rand()%10;
-			freezeDuration-= r;
+			freezeDuration-= r;		
 		}
-		if (freezeDuration == 0)
+		if (freezeDuration == 0)		//if calculated duration is 0, return
 		{
 			return;
 		}
@@ -200,7 +198,7 @@ void Castle::DealDamage(Enemy* Ep, int timestep)
 	{
 		K = 1;
 	}
-	double DamageDealt =(double)((double)CastlePower / Ep->GetDistance()) * (1/K);
+	double DamageDealt =(double)((double)CastlePower / Ep->GetDistance()) * (1/K);	//deal damage, decrememnt health by calculated amount
 	Ep->SetHealth(Ep->GetHealth() - DamageDealt);
 	if (Ep->GetFSTS() > timestep)
 	{

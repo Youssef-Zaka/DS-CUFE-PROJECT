@@ -8,7 +8,7 @@ Freezer::Freezer(int id, int T, int ArvT, double H, double P, int RP, double S) 
 
 void Freezer::Move()
 {
-	if (Health < OriginalHealth / 2)
+	if (Health < OriginalHealth / 2)		//if below half health, move at half speed
 	{
 		for (int i = 0; i < Speed / 2; i++)
 		{
@@ -17,7 +17,7 @@ void Freezer::Move()
 	}
 	else
 	{
-		for (int i = 0; i < Speed; i++)
+		for (int i = 0; i < Speed; i++)		//else, move at regular speed
 		{
 			DecrementDist();
 		}
@@ -28,7 +28,7 @@ void Freezer::Act(Castle* c, Queue<Enemy*>&, int activecount)
 {
 
 	//Amount of ice a freezer can throw on a castle
-	double IceAmount = (Power * (Health / OriginalHealth)) / (4 * Distance);
+	double IceAmount = (Power * (Health / OriginalHealth)) / (4.0 * Distance);
 
 	if (c->GetFreezeind() == 1)//If the castle is frozen, the freezer has no effect on it
 	{
