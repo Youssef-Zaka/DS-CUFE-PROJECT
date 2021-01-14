@@ -253,7 +253,7 @@ void Battle::UpdateEnemies()
 		Ep->Move();
 		if (!Ep->GetReloadCounter())
 		{
-			Ep->Act(GetCastle(), Q_Active);
+			Ep->Act(GetCastle(), Q_Active,ActiveCount);
 		}
 		Ep->SetReloadCounter(Ep->GetReloadCounter()+1);
 		if (Ep->GetReloadCounter() == Ep->GetReloadPeriod())

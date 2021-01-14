@@ -9,6 +9,6 @@ class Healer :
 public:
 	Healer(int id, int T, int ArvT, double H, double P, int RP, double S);
 	void Move();
-	void Act(Castle*, Queue<Enemy*>&);
+	void Act(Castle*, Queue<Enemy*>&, int activecount);
 };
 

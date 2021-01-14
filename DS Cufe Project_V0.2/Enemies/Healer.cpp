@@ -143,6 +143,39 @@ void Healer::Move()
 	}	
 }
 
-void Healer::Act(Castle*, Queue<Enemy*>&)
+void Healer::Act(Castle*, Queue<Enemy*>& Active, int activecount)
 {
+	double HealedValue;
+	double HealerValues = (Health/OriginalHealth) * Power;
+	Enemy* Ep;
+	for (int i = 0; i < activecount-1; i++)
+	{
+		Active.dequeue(Ep);
+		double EnemyValues = Ep->GetHealth()/Ep->GetOriginalHealth();
+		HealedValue = (HealerValues *EnemyValues) / (1/(1+ abs(Ep->GetDistance()-Distance)));
+		if (MovingBack)
+		{
+			if (Ep->GetDistance() >= Distance && Ep->GetDistance() <= (Distance + 2))
+			{
+				Ep->SetHealth(Ep->GetHealth() + HealedValue);
+				if (Ep->GetHealth() > Ep->GetOriginalHealth())
+				{
+					Ep->SetHealth(Ep->GetOriginalHealth());
+				}
+			}
+		}
+		else
+		{
+			if (Ep->GetDistance() >= (Distance-2 )&& Ep->GetDistance() <= (Distance))
+			{
+				Ep->SetHealth(Ep->GetHealth() + HealedValue);
+				if (Ep->GetHealth() > Ep->GetOriginalHealth())
+				{
+					Ep->SetHealth(Ep->GetOriginalHealth());
+				}
+			}
+		}
+		Active.enqueue(Ep);
+	}
+
 }

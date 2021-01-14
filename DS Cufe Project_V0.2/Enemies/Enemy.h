@@ -75,7 +75,7 @@ public:
 	// Virtual Functions: ----------------
 
 	virtual void Move() = 0;	//All enemies can move
-	virtual void Act(Castle*,Queue<Enemy*>&) = 0;	//Acting means fighting or healing
+	virtual void Act(Castle*,Queue<Enemy*>&, int activecount) = 0;	//Acting means fighting or healing
 
 	//
 	// TODO: Add More Member Functions As Needed

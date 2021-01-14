@@ -25,7 +25,7 @@ void Fighter::Move()
 
 }
 
-void Fighter::Act(Castle*, Queue<Enemy*>&)
+void Fighter::Act(Castle*, Queue<Enemy*>&, int activecount)
 {
 	//if (ReloadPeriod == CurrentReload)
 	//{
