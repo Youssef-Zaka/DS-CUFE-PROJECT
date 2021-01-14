@@ -24,7 +24,7 @@ void Freezer::Move()
 	}
 }
 
-void Freezer::Act(Castle*)
+void Freezer::Act(Castle*, Queue<Enemy*>&)
 {
 }
 

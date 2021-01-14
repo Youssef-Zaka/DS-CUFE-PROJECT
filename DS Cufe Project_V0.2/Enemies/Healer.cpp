@@ -143,6 +143,6 @@ void Healer::Move()
 	}	
 }
 
-void Healer::Act(Castle*)
+void Healer::Act(Castle*, Queue<Enemy*>&)
 {
 }

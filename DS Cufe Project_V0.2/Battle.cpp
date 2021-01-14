@@ -251,7 +251,15 @@ void Battle::UpdateEnemies()
 	{
 		Q_Active.dequeue(Ep);
 		Ep->Move();
-		Ep->Act(GetCastle());
+		if (!Ep->GetReloadCounter())
+		{
+			Ep->Act(GetCastle(), Q_Active);
+		}
+		Ep->SetReloadCounter(Ep->GetReloadCounter()+1);
+		if (Ep->GetReloadCounter() == Ep->GetReloadPeriod())
+		{
+			Ep->SetReloadCounter(0);
+		}
 		Q_Active.enqueue(Ep);
 	}
 }

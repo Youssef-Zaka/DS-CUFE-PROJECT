@@ -153,6 +153,16 @@ int Enemy::GetFSTS()
 	return FirstshotTimeStep;
 }
 
+int Enemy::GetReloadCounter()
+{
+	return ReloadCounter;
+}
+
+void Enemy::SetReloadCounter(int rc)
+{
+	ReloadCounter = rc;
+}
+
 
 
 

@@ -2,6 +2,7 @@
 
 #include "..\Defs.h"
 #include "..\CMUgraphicsLib\CMUgraphics.h"
+#include "..\Generic_DS\Queue.h"
 class Castle;
 
 class GUI;
@@ -34,6 +35,7 @@ protected:
 	int FreezeDuration;
 	int KillTimeStep;   // used in output calculation
 	int FirstshotTimeStep = 1000000000;  // used in output calculation
+	int ReloadCounter = 0;
 public:
 	Enemy(int id, int arrTime, int d = MaxDistance);
 	Enemy(int id,int T, int ArvT, double H, double P, int RP, double S);
@@ -68,10 +70,12 @@ public:
 	void SetFSTS(int);
 	int GetFSTS();
 	
+	int GetReloadCounter();
+	void SetReloadCounter(int rc);
 	// Virtual Functions: ----------------
 
 	virtual void Move() = 0;	//All enemies can move
-	virtual void Act(Castle*) = 0;	//Acting means fighting or healing
+	virtual void Act(Castle*,Queue<Enemy*>&) = 0;	//Acting means fighting or healing
 
 	//
 	// TODO: Add More Member Functions As Needed
