@@ -22,7 +22,8 @@ Battle::Battle()
 	pGUI = NULL;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////
+//Add Certain enemy to Appropriate list and increment the relative count of that enemy type
 void Battle::AddtoActiveList(Enemy* Ptr)
 {
 	Q_Active.enqueue(Ptr);
@@ -53,13 +54,12 @@ void Battle::AddtoKilledList(Enemy* Ptr)
 	Q_Killed_List.enqueue(Ptr);
 	KilledCount++;
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 Castle * Battle::GetCastle()
 {
 	return &BCastle;
-}
-
-
+} //return pointer to castle
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::RunSimulation()
 {
 	pGUI = new GUI;
@@ -79,10 +79,8 @@ void Battle::RunSimulation()
 
 	delete pGUI;
 	
-}
-
-
-
+} // Run Simulation and Get mode from user andstart mode loop
+//////////////////////////////////////////////////////////////////////////////////////////
 //Add enemy lists (inactive, active,.....) to drawing list to be displayed on user interface
 void Battle::AddAllListsToDrawingList()
 {	
@@ -92,11 +90,6 @@ void Battle::AddAllListsToDrawingList()
 	for(int i=0; i<InactiveCount; i++)
 		pGUI->AddToDrawingList(EnemyList[i]);
 
-	//Add other lists to drawing list
-	//TO DO
-	//In next phases, you should add enemies from different lists to the drawing list
-	//For the sake of demo, we will use DemoList
-
 	int ActiveC = 0; //Variable to be passed by reference to toArray function, it stores queue size
 	for(int i=0; i<ActiveCount; i++)
 		pGUI->AddToDrawingList(Q_Active.toArray(ActiveC)[i]); //Adds ActiveList to DrawingList
@@ -105,7 +98,7 @@ void Battle::AddAllListsToDrawingList()
 	for (int i = 0; i < FrostedCount; i++)
 		pGUI->AddToDrawingList(Q_Frosted_List.toArray(ActiveC)[i]); //Adds Frosted to DrawingList
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 //check the inactive list and activate all enemies that has arrived
 void Battle::ActivateEnemies()
 {
@@ -118,9 +111,9 @@ void Battle::ActivateEnemies()
 		Q_Inactive.dequeue(pE);	//remove enemy from the queue
 		pE->SetStatus(ACTV);	//make status active
 		AddtoActiveList(pE);
-		if (pE->GetType() == 0)
+		if (pE->GetType() == 0)		//add to appropriate list relative to type
 		{
-			AddtoFightersList(pE);
+			AddtoFightersList(pE);		
 		}
 		else if (pE->GetType() == 1)
 		{
@@ -133,41 +126,46 @@ void Battle::ActivateEnemies()
 	
 	}
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::UpdateEnemies() 
 {	
-	Enemy* Ep;
-	for (int i = 0; i < ActiveCount; i++)
-	{
+	Enemy* Ep;													//pointer to enemy 
+	for (int i = 0; i < ActiveCount; i++)						//Loop for active count and Move each active enenmy
+	{															//and check for reload perior, if passed, then act
 		Q_Active.dequeue(Ep);
 		Ep->Move();
-		if (!Ep->GetReloadCounter())
-		{
-			Ep->Act(GetCastle(), Q_Active,ActiveCount);
+		if (!Ep->GetReloadCounter())							//if reload is equal to 0, then finished reloading and act
+		{	
+			Ep->Act(GetCastle(), Q_Active,ActiveCount);			
 		}
-		Ep->SetReloadCounter(Ep->GetReloadCounter()+1);
-		if (Ep->GetReloadCounter() == Ep->GetReloadPeriod())
+		Ep->SetReloadCounter(Ep->GetReloadCounter()+1);			//increment reload each time step
+		if (Ep->GetReloadCounter() == Ep->GetReloadPeriod())	//if reload reaches reload period from input file
 		{
-			Ep->SetReloadCounter(0);
+			Ep->SetReloadCounter(0);							//reset reload again to 0 and atack next time step
 		}
 		Q_Active.enqueue(Ep);
 	}
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::ProcessFrostedList()
 {
 	Enemy* Ep;
-	int Freezeint = FrostedCount;
+	int Freezeint = FrostedCount;									//number used for while loop
 	while (Freezeint)
 	{
 		Freezeint--;
 		Q_Frosted_List.dequeue(Ep);
-		Ep->SetFreezeDuration(Ep->GetFreezeDuration()-1);
-		if (Ep->GetFreezeDuration() <= 0)
+		Ep->SetReloadCounter(Ep->GetReloadCounter() + 1);			//increment reload each time step
+		if (Ep->GetReloadCounter() == Ep->GetReloadPeriod())
 		{
-			Q_Active.enqueue(Ep);
+			Ep->SetReloadCounter(0);								//reset reload
+		}
+		Ep->SetFreezeDuration(Ep->GetFreezeDuration()-1);			//Decrement remaining freeze duration 
+		if (Ep->GetFreezeDuration() <= 0)							//if it becomes zero or negative, then return to active list
+		{
+			Q_Active.enqueue(Ep);									//put in active list
 			ActiveCount++;
-			FrostedCount--;
+			FrostedCount--;											//Decrement Frosted count and Relative Type
 			if (Ep->GetType() == 0)
 			{
 				FrozenFighterCount--;
@@ -180,22 +178,23 @@ void Battle::ProcessFrostedList()
 			{
 				FrozenFreezerCount--;
 			}
-			Ep->SetStatus(ACTV);
+			Ep->SetStatus(ACTV);									//set active status
 			continue;
 		}
-		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());
+		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());			//If still frozen, return to frosted list
 	}
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::PrepareListsP_Q_S()
 {
-	EmptyFighterList();
+	//Empty all lists in preparation of refilling them with new priorities and values and status
+	EmptyFighterList();		
 	EmptyFreezerList();
 	EmptyHealerList();
 	Enemy* Ep;
 	for (int i = 0; i < ActiveCount; i++)
 	{
-		Q_Active.dequeue(Ep);
+		Q_Active.dequeue(Ep);				//deque from active, and enque into relative list, then enqueue in active once again
 		if (Ep->GetType() == 0)
 		{
 			AddtoFightersList(Ep);
@@ -209,7 +208,7 @@ void Battle::PrepareListsP_Q_S()
 			AddtoFreezersList(Ep);
 		}
 		Q_Active.enqueue(Ep);
-	}
+	}									//same Procedure for frosted list 
 	for (int i = 0; i < FrostedCount; i++)
 	{
 		Q_Frosted_List.dequeue(Ep);
@@ -228,9 +227,7 @@ void Battle::PrepareListsP_Q_S()
 		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());
 	}
 }
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::EmptyFighterList()
 {
 	Enemy* Ep;
@@ -238,9 +235,9 @@ void Battle::EmptyFighterList()
 	{
 		Q_Fighters.dequeue(Ep);
 	}
-	FighterCount = 0;
+	FighterCount = 0;				//reset fighter count
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::EmptyHealerList()
 {
 	Enemy* Ep;
@@ -248,8 +245,9 @@ void Battle::EmptyHealerList()
 	{
 		S_Healers.pop();
 	}
-	HealerCount = 0;
+	HealerCount = 0;		//reset healer count 
 }
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::EmptyFreezerList()
 {
 	Enemy* Ep;
@@ -257,38 +255,37 @@ void Battle::EmptyFreezerList()
 	{
 		Q_Freezers.dequeue(Ep);
 	}
-	FreezerCount = 0;
+	FreezerCount = 0;			//reset freezer count
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::Silent_Mode()
 {
 	CurrentTimeStep = 0; //reset time step 
 	getinput();			//Get Input from file
 
-	pGUI->PrintMessage("Click to Start Silent Simulation");
+	pGUI->PrintMessage("Click to Start Silent Simulation");		//prompt user for click
 	pGUI->waitForClick();
-	pGUI->PrintMessage(" Simulation in Progress");
+	pGUI->PrintMessage(" Simulation in Progress");				
 	Enemy* Ep;
-	//int battlestep = 0;
-	while (((Q_Inactive.peekFront(Ep)) || ActiveCount > 0 || FrostedCount > 0) && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
+	//Loop as long as Castle is alive, And some enemies are alive or yet to arrive
+	while (((Q_Inactive.peekFront(Ep)) || ActiveCount > 0 || FrostedCount > 0) && BCastle.GetHealth() > 0)	
 	{
-		CurrentTimeStep++;
-		ActivateEnemies();
-		UpdateEnemies();
-		if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)
+		CurrentTimeStep++;		//increment time step each iteration
+		ActivateEnemies();		//Activate enemies from input file if thier time arrival >= current
+		UpdateEnemies();		//move and act
+		if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)	//Check if castle is frozen, if yes, freeze for one time step
 		{
 			BCastle.SetFreezeind(0);
-			BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);
+			BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);	//castle action
 		}
 		else
 		{
-			BCastle.SetFreezeind(2);
+			BCastle.SetFreezeind(2);			//if frozen, remove freeze and act again next time step
 		}
-		PrepareActiveList();
-		
+		PrepareActiveList();					//loop through active list looking for killed of frozen enemies
 	}
-
-	if (BCastle.GetHealth() == 0)
+	//////////////////////////////////////////////////////////////////////////////////////////
+	if (BCastle.GetHealth() == 0) //check if game is won, lost , or drawn
 	{
 		IsGameLoss = true;
 		pGUI->PrintMessage("Simulation ended, Output File Generated, Game Is Loss, Click to exit");
@@ -302,15 +299,15 @@ void Battle::Silent_Mode()
 	{
 			pGUI->PrintMessage("Simulation ended, Output File Generated, Game Is Drawn, Click to exit");
 	}
-	CreateOutput();
-	pGUI->waitForClick();
+	CreateOutput();			//create output file
+	pGUI->waitForClick();	//wait for click to exit
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::Step_By_Step_Mode()
 {
 	CurrentTimeStep = 0; //reset time step 
 	getinput();			//Get Input from file
-	AddAllListsToDrawingList();	
+	AddAllListsToDrawingList();				
 	pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(), GetCastle()->GetisCastleFrosted(),
 		FighterCount, FreezerCount, HealerCount, ActiveCount,
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
@@ -322,9 +319,9 @@ void Battle::Step_By_Step_Mode()
 	while (((Q_Inactive.peekFront(Ep)) || ActiveCount>0 || FrostedCount > 0) && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
 	{
 	CurrentTimeStep++;
-	ActivateEnemies();
-	UpdateEnemies();
-	if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)
+	ActivateEnemies(); //Activate enemies from input file if thier time arrival >= current
+	UpdateEnemies();  //move and act
+	if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)  //check for castle frosted status
 	{
 		BCastle.SetFreezeind(0);
 		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);
@@ -333,38 +330,37 @@ void Battle::Step_By_Step_Mode()
 	{
 		BCastle.SetFreezeind(2);
 	}
-	PrepareActiveList();
-	pGUI->ResetDrawingList();
+	PrepareActiveList();				//refresh active list with updated enemy statuses
+	pGUI->ResetDrawingList();			//add all lists to drawing lists
 	AddAllListsToDrawingList();
 	pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(), GetCastle()->GetisCastleFrosted(),
 		FighterCount, FreezerCount, HealerCount, ActiveCount,
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
-		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount);
-	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
-	Sleep(1000);
+		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount); //update interface with new numbers
+	Sleep(1000);		 //THis is step by step, so we wait for one second
 	}
 
 	if (BCastle.GetHealth() == 0)
 	{
 		IsGameLoss = true;
-		/*pGUI->PrintMessage("Game Is Loss, Click to exit");*/
+		pGUI->PrintMessage("simulation complete, Game Is Loss, Click to exit");
 	}
 	else if ((!Q_Inactive.peekFront(Ep)) || ActiveCount == 0 || FrostedCount == 0)
 	{
 		IsGameWin = true;
-		/*pGUI->PrintMessage("Game Is Win, Click to exit");*/
+		pGUI->PrintMessage("simulation complete, Game Is Win, Click to exit");
 	}
 	if (!IsGameWin && !IsGameLoss)
 	{
-	/*	pGUI->PrintMessage("Game Is Drawn, Click to exit");*/
+		pGUI->PrintMessage("simulation complete, Game Is Drawn, Click to exit");
 	}
-	CreateOutput();
+	CreateOutput();	//create output file
 
 	
-	pGUI->waitForClick();
+	pGUI->waitForClick(); ///wait for click then exit application
 }
-
-void Battle::InterActive_Mode()
+//////////////////////////////////////////////////////////////////////////////////////////
+void Battle::InterActive_Mode()  //GENERALLY THE SAME AS STEP BY STEP, BUT WAIT FOR CLICK INSTEAD OF ONE SECOND
 {
 	CurrentTimeStep = 0; //reset time step 
 	getinput();			//Get Input from file
@@ -404,24 +400,24 @@ void Battle::InterActive_Mode()
 	if (BCastle.GetHealth() == 0)
 	{
 		IsGameLoss = true;
-		/*pGUI->PrintMessage("Game Is Loss, Click to exit");*/
+		pGUI->PrintMessage("simulation ended, Game Is Loss, Click to exit");
 	}
 	else if ((!Q_Inactive.peekFront(Ep)) || ActiveCount == 0 || FrostedCount == 0)
 	{
 		IsGameWin = true;
-		/*pGUI->PrintMessage("Game Is Win, Click to exit");*/
+		pGUI->PrintMessage("simulation ended, Game Is Win, Click to exit");
 	}
 	if (!IsGameWin && !IsGameLoss)
 	{
-		/*	pGUI->PrintMessage("Game Is Drawn, Click to exit");*/
+			pGUI->PrintMessage("simulation ended, Game Is Drawn, Click to exit");
 	}
 	CreateOutput();
 
 
-	pGUI->waitForClick();
+	pGUI->waitForClick();		//Wait for click then exit program
 }
-
-void Battle::PrepareActiveList()
+//////////////////////////////////////////////////////////////////////////////////////////
+void Battle::PrepareActiveList()		//loop on active list, dequeue and then check for Killed or Frosted Enemy
 {
 	int WhileTemp = ActiveCount;
 	Enemy* Ep;
@@ -452,7 +448,7 @@ void Battle::PrepareActiveList()
 			}
 			Ep->SetStatus(KILD);
 			Ep->SetKTS(this->CurrentTimeStep);
-			AddtoKilledList(Ep);
+			AddtoKilledList(Ep);				//if killed, move to killed list
 			continue;
 		}
 		if (Ep->GetFreezeDuration() >0)
@@ -478,12 +474,12 @@ void Battle::PrepareActiveList()
 			{
 				ActiveCount = 0;
 			}
-			AddtoFrostedList(Ep);
+			AddtoFrostedList(Ep);		//if frosted, move to frosted list
 			continue;
 		}
-		Q_Active.enqueue(Ep);
+		Q_Active.enqueue(Ep);			
 	}
-	int fortemp = FrostedCount;
+	int fortemp = FrostedCount;			//LOOP OVER FROSTED LIST AND DO THE SAME
 	for (int i = 0; i < fortemp; i++)
 	{
 		Q_Frosted_List.dequeue(Ep);
@@ -517,13 +513,12 @@ void Battle::PrepareActiveList()
 			AddtoKilledList(Ep);
 			continue;
 		}
-		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());
+		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());		//
 	}
 	PrepareListsP_Q_S();
 	ProcessFrostedList();
 }
-
-
+//////////////////////////////////////////////////////////////////////////////////////////
 //Kareem
 //Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
@@ -571,7 +566,7 @@ void Battle::getinput()
 		Q_Inactive.enqueue(eptr);  // adding newly created enemy to inactive list
 	}
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 void Battle::CreateOutput()
 {
 	ofstream output("Output.txt");   // setting output file
@@ -648,7 +643,7 @@ void Battle::CreateOutput()
 		return;
 	}
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////
 string Battle::SetformatOutput(int x)  // returns a string that maintains table format for enemy info in output file 
 {
 	string r;

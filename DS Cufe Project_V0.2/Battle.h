@@ -50,33 +50,31 @@ public:
 	void CreateOutput();					//Export Output To ouputfile
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////	
-	void AddtoActiveList(Enemy* Ptr);
-	void AddtoFightersList(Enemy* Ptr);
-	void AddtoHealersList(Enemy* Ptr);
-	void AddtoFreezersList(Enemy* Ptr);
-	void AddtoFrostedList(Enemy* Ptr);
-	void AddtoKilledList(Enemy* Ptr);
-
-	void UpdateEnemies();
-
-	void ProcessFrostedList();
-	void PrepareListsP_Q_S();
-	void EmptyFighterList();
-	void EmptyHealerList();
-	void EmptyFreezerList();
-	//
-	// TODO: Add More Member Functions As Needed
-	//
-	//ZAKA
-	//Adding Functions for different game modes, silent, step by step and interactive
-	void Silent_Mode();
-	void Step_By_Step_Mode();
-	void InterActive_Mode(); 
-	
-	///TODO UPDATE ACTIVE LIST WITH NEW DEATHS AND FREEZES EACH TURN
-	void PrepareActiveList();
-
-	string SetformatOutput(int);
+	void AddtoActiveList(Enemy* Ptr);		//Adds an enemy to active list, increment active count
+	void AddtoFightersList(Enemy* Ptr);		//Add to fighter list, increment fighter count 
+	void AddtoHealersList(Enemy* Ptr);		//add to healers list increment healer count 
+	void AddtoFreezersList(Enemy* Ptr);		//add to freezer list incrememnt freezer count
+	void AddtoFrostedList(Enemy* Ptr);		//add to frosted list increment frosted count
+	void AddtoKilledList(Enemy* Ptr);		//add to killed list incrememnt killed count 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void UpdateEnemies();					//move and apply enemy acttions one by one if not frosted 
+	void ProcessFrostedList();				//Check for killed in Frosted list
+	void PrepareListsP_Q_S();				//ReEnqueue Enemey lists with new priorities or STATUS
+	void EmptyFighterList();				//Prepare Fighter list , used in Above Function
+	void EmptyHealerList();					//Prepare Healer list , used in Above Function
+	void EmptyFreezerList();				//Prepare Freezer list , used in Above Function
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void Silent_Mode();						//Silent mode Loop, NO drawing, just output file
+	void Step_By_Step_Mode();				//Step by step mode Loop, update each second
+	void InterActive_Mode();				//Interactive mode Loop, update each click
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void PrepareActiveList();				//Check active list for Status ailments or deaths
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	string SetformatOutput(int);			//Format for output file
 
 };
 
