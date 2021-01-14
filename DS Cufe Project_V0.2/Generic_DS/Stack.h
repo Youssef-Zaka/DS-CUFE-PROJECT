@@ -15,7 +15,7 @@ public:
 
 	Stack()
 	{
-		Head = nullptr;
+		Head = nullptr;		//initialize head to null
 	}
 
 	bool isEmpty() //Check if the Stack is empty or not
@@ -27,7 +27,7 @@ public:
 		}
 	}
 
-	void push(T newentry)
+	void push(T newentry)		//Make the head point to the new item, set new item next to previous head
 	{
 		Node<T>* temp;
 		temp = new Node<T>();
@@ -36,9 +36,9 @@ public:
 		Head = temp;
 	}
 
-	bool pop()
+	bool pop()					//Pop the head, ad relplace it with its next, if it exists
 	{
-		if (isEmpty()) { return false; }
+		if (isEmpty()) { return false; }		//if is alrady empty, return
 		Node<T>* temp;
 		temp = Head;
 		Head = Head->getNext();
@@ -47,7 +47,7 @@ public:
 		return true;
 	}
 
-	T peek()
+	T peek()							//return the item of the head node 
 	{
 		if (!isEmpty())
 		{
@@ -56,7 +56,7 @@ public:
 		return nullptr;
 	}
 
-	void display()
+	void display()					//cout the stack, head to toe
 	{
 		if (isEmpty())
 		{

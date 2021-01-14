@@ -103,7 +103,7 @@ Output: True if the operation is successful; otherwise false.
 */
 
 template <typename T>
-bool PQueue<T>::enqueue( const T& newEntry , double P)
+bool PQueue<T>::enqueue( const T& newEntry , double P)		//send item and its priority
 {
 	Node<T>* newNodePtr = new Node<T>(newEntry);
 	newNodePtr->SetPriority(P);
@@ -115,15 +115,15 @@ bool PQueue<T>::enqueue( const T& newEntry , double P)
 		return true;
 	}
 	// The queue was not empty
-	if (frontPtr->GetPriority() < P)
+	if (frontPtr->GetPriority() < P)		//if item has higher priority than front ptr
 	{
-		newNodePtr->setNext(frontPtr);
+		newNodePtr->setNext(frontPtr);		//set item to be the front of the queue
 		frontPtr = newNodePtr;
 		return true;
 	}
-	while (StartNode->getNext() && StartNode->getNext()->GetPriority() > P)
+	while (StartNode->getNext() && StartNode->getNext()->GetPriority() > P)	//Keep going untill u fing correct location in between priorities
 	{
-		StartNode = StartNode->getNext();
+		StartNode = StartNode->getNext();			//if they have the same priorities then, First come, first serve
 	}
 	newNodePtr->setNext(StartNode->getNext());
 	StartNode->setNext(newNodePtr);
