@@ -251,7 +251,7 @@ void Battle::UpdateEnemies()
 	{
 		Q_Active.dequeue(Ep);
 		Ep->Move();
-		Ep->Act();
+		Ep->Act(GetCastle());
 		Q_Active.enqueue(Ep);
 	}
 }
@@ -390,7 +390,15 @@ void Battle::Step_By_Step_Mode()
 	CurrentTimeStep++;
 	ActivateEnemies();
 	UpdateEnemies();
-	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
+	if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)
+	{
+		BCastle.SetFreezeind(0);
+		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
+	}
+	else
+	{
+		BCastle.SetFreezeind(2);
+	}
 	PrepareActiveList();
 	pGUI->ResetDrawingList();
 	AddAllListsToDrawingList();
@@ -427,7 +435,15 @@ void Battle::InterActive_Mode()
 		ActivateEnemies();
 		PrepareActiveList();
 		UpdateEnemies();
-		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
+		if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)
+		{
+			BCastle.SetFreezeind(0);
+			BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount);
+		}
+		else
+		{
+			BCastle.SetFreezeind(2);
+		}
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -534,7 +550,7 @@ void Battle::PrepareActiveList()
 //Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
 {
-	fstream file("test.txt");
+	fstream file("input.txt");
 	double ch;
 	int n, cp;
 	file >> ch;

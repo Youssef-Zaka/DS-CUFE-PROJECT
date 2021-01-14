@@ -27,7 +27,7 @@ public:
 		}
 	}
 
-	void push(T newentry)
+	void push(T newentry) //Push elements in the stack
 	{
 		Node<T>* temp;
 		temp = new Node<T>();
@@ -36,7 +36,7 @@ public:
 		Head = temp;
 	}
 
-	bool pop()
+	bool pop() //Pop elements from the stack
 	{
 		if (isEmpty()) { return false; }
 		Node<T>* temp;
@@ -47,7 +47,7 @@ public:
 		return true;
 	}
 
-	T peek()
+	T peek() 
 	{
 		if (!isEmpty())
 		{
