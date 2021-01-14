@@ -415,13 +415,18 @@ void Battle::Step_By_Step_Mode()
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
 		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount);
 	//pGUI->waitForClick(); //THis is step by step, so we wait for one second
-	Sleep(100);
-	/*battlestep++;
-	if (battlestep == 500)
-	{
-		battlestep = 1;
-	}*/
+	Sleep(1000);
 	}
+
+	if (BCastle.GetHealth() == 0)
+	{
+		IsGameLoss = true;
+	}
+	else if ((!Q_Inactive.peekFront(Ep)) || ActiveCount == 0 || FrostedCount == 0)
+	{
+		IsGameWin = true;
+	}
+
 }
 
 void Battle::InterActive_Mode()
@@ -436,8 +441,8 @@ void Battle::InterActive_Mode()
 		KilledFighterCount,KilledFreezerCount,KilledHealerCount,KilledCount);	//upadte interface to show the initial case where all enemies are still inactive
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	pGUI->waitForClick();
-
-	while (KilledCount < EnemyCount)	//as long as some enemies are alive (should be updated in next phases)
+	Enemy* Ep;
+	while (((Q_Inactive.peekFront(Ep)) || ActiveCount > 0 || FrostedCount > 0) && BCastle.GetHealth() > 0)	//as long as some enemies are alive (should be updated in next phases)
 	{
 		CurrentTimeStep++;
 		ActivateEnemies();
@@ -454,14 +459,12 @@ void Battle::InterActive_Mode()
 		PrepareActiveList();
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
-		////////////////////////////////////////////////////////////////////////////////////////////////////
 		pGUI->UpdateInterface(CurrentTimeStep, GetCastle()->GetHealth(), GetCastle()->GetisCastleFrosted(),
 			FighterCount, FreezerCount, HealerCount, ActiveCount,
 			FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
 			KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount);
-		////////////////////////////////////////////////////////////////////////////////////////////////////
+		//pGUI->waitForClick(); //THis is step by step, so we wait for one second
 		pGUI->waitForClick(); //THis is Interactive, so we wait for click
-		/*Sleep(100);*/
 	}
 }
 
@@ -560,7 +563,7 @@ void Battle::PrepareActiveList()
 //Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
 {
-	fstream file("test.txt");    // setting input file
+	fstream file("input.txt");    // setting input file
 	double ch;
 	int n, cp;
 	file >> ch;  // retreiving castle health from input file
