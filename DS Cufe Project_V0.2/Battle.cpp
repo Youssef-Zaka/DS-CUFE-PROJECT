@@ -424,7 +424,7 @@ void Battle::PrepareActiveList()		//loop on active list, dequeue and then check 
 	for (int i = 0; i < WhileTemp; i++)
 	{
 		Q_Active.dequeue(Ep);
-		if (Ep->GetHealth() <= 0)
+		if (Ep->GetHealth() <= 0)			//if health is below or equal to 0, remove from active, add to killed
 		{
 			if (Ep->GetType() == 0)
 			{
@@ -515,8 +515,8 @@ void Battle::PrepareActiveList()		//loop on active list, dequeue and then check 
 		}
 		Q_Frosted_List.enqueue(Ep,Ep->GetFreezeDuration());		//
 	}
-	PrepareListsP_Q_S();
-	ProcessFrostedList();
+	PrepareListsP_Q_S();										//refresh active specialized lists
+	ProcessFrostedList();										//refresh frosted lists
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 //Kareem
