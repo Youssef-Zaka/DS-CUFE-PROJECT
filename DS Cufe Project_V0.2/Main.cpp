@@ -1,10 +1,6 @@
 #include "Battle.h"
 #include "GUI\GUI.h"
-//#include <iostream>	//USED IN RANDOM GENEREATION TEST
-//#include <time.h>		//USED IN RANDOM GENEREATION TEST
-//#include <chrono>		//USED IN RANDOM GENEREATION TEST
-//#include "Generic_DS/PQueue.h" //USED IN P QUEUE TEST
-//#include "Enemies/Enemy.h"	//USED IN P QUEUE TEST
+
 
 int main()
 {
@@ -16,6 +12,12 @@ int main()
 	
 	return 0;
 }
+
+////#include <iostream>	//USED IN RANDOM GENEREATION TEST
+//#include <time.h>		//USED IN RANDOM GENEREATION TEST
+//#include <chrono>		//USED IN RANDOM GENEREATION TEST
+//#include "Generic_DS/PQueue.h" //USED IN P QUEUE TEST
+//#include "Enemies/Enemy.h"	//USED IN P QUEUE TEST
 
 
 //MAIN USED TO TEST PRIORITY QUEUE
@@ -74,4 +76,41 @@ int main()
 //	std::cout << "Percentage of Freeze from 1000000000 runs was: " << (double)(FreezeCount/NonFreezeCount)*100 << std::endl;
 //	
 //	
+//}
+//#include <iostream>
+//#include <fstream>
+//#include <stdlib.h>
+//using namespace std;
+//
+//int main()
+//{
+//	ofstream file("test.txt");
+//
+//	int count;
+//	cout << "Enter number of enemies to be generated: ";
+//	cin >> count;
+//
+//	srand(time(0));
+//
+//	int ch = rand() % 246 + 25;
+//	file << ch << " ";
+//	int n = rand() % 10 + 1;
+//	file << n << " ";
+//	int Cp = rand() % 100 + 1;
+//	file << Cp << endl;
+//	file << count << endl;
+//	int id = 1;
+//	int at = 1;
+//	for (int i = 0; i < count; i++)
+//	{
+//		file << id << " ";
+//		id++;
+//		file << rand() % 3 << " ";
+//		at = at + rand() % 3;
+//		file << at << " ";
+//		file << rand() % 51 + 5 << " ";
+//		file << rand() % 46 + 5 << " ";
+//		file << rand() % 11 + 2 << " ";
+//		file << rand() % 10 + 1 << endl;
+//	}
 //}
