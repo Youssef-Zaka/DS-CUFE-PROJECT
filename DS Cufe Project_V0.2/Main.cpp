@@ -85,7 +85,7 @@ int main()
 ///////////Random Input File Generator
 //int main()
 //{
-//	ofstream file("test.txt");
+//	ofstream file("input.txt");
 //
 //	int count;
 //	cout << "Enter number of enemies to be generated: ";

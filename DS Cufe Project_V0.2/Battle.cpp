@@ -337,7 +337,7 @@ void Battle::Step_By_Step_Mode()
 		FighterCount, FreezerCount, HealerCount, ActiveCount,
 		FrozenFighterCount, FrozenFreezerCount, FrozenHealerCount, FrostedCount,
 		KilledFighterCount, KilledFreezerCount, KilledHealerCount, KilledCount); //update interface with new numbers
-	Sleep(1000);		 //THis is step by step, so we wait for one second
+	Sleep(10);		 //THis is step by step, so we wait for one second
 	}
 
 	if (BCastle.GetHealth() == 0)
@@ -523,7 +523,7 @@ void Battle::PrepareActiveList()		//loop on active list, dequeue and then check 
 //Get input function that takes in the parameters of the game mode from input file
 void Battle::getinput()
 {
-	fstream file("test.txt");    // setting input file
+	fstream file("input.txt");    // setting input file
 	double ch;
 	int n, cp;
 	file >> ch;  // retreiving castle health from input file
@@ -627,19 +627,22 @@ void Battle::CreateOutput()
 	double TotalCastleDamage = BCastle.GetOriginalHealth()-BCastle.GetHealth();    // calculating total castle damage by obtaining its original hp and current hp 
 	output << "Castle Total Damage = " << TotalCastleDamage << endl;   // adding castle damage to output file 
 
+	double AFSD = sumfirstshotdelay * 1.0 / KilledEnemies;
+	double AKD = sumkilldelay * 1.0 / KilledEnemies;
+
 	if (IsGameWin == true)     // adding required info incase game was won or loss/drawn 
 	{
 		output << "Total Killed Enemies = " << KilledEnemies << endl;
-		output << "Average First-Shot delay = " << (sumfirstshotdelay / KilledEnemies) << endl; // getting average by dividing sum and number of enemies that contributed to sum
-		output << "Average Kill Delay = " << (sumkilldelay / KilledEnemies) << endl;
+		output << "Average First-Shot delay = " << (AFSD) << endl; // getting average by dividing sum and number of enemies that contributed to sum
+		output << "Average Kill Delay = " << (AKD) << endl;
 		return;
 	}
 	else
 	{
 		output << "Total Killed Enemies = " << KilledEnemies << endl;
 		output << "Total Alive Enemies = " << (EnemyCount - KilledEnemies) << endl;  // calculating active by subtracting killed from total enemy count
-		output << "Average First-Shot delay for killed enemies = " << (sumfirstshotdelay / KilledEnemies) << endl;
-		output << "Average Kill Delay for killed enemies = " << (sumkilldelay / KilledEnemies) << endl;
+		output << "Average First-Shot delay for killed enemies = " << (AFSD) << endl;
+		output << "Average Kill Delay for killed enemies = " << (AKD) << endl;
 		return;
 	}
 }

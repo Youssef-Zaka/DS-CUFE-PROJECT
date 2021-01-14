@@ -1,0 +1,10 @@
+Game is Loss
+KTS    ID     FD     KD     LT
+14     2      0      11     11     
+20     11     0      8      8      
+28     3      0      25     25     
+Castle Total Damage = 186
+Total Killed Enemies = 3
+Total Alive Enemies = 27
+Average First-Shot delay for killed enemies = 0
+Average Kill Delay for killed enemies = 14.6667
