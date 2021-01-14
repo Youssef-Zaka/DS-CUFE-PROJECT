@@ -7,7 +7,6 @@ Battle::Battle()
 	KilledCount = 0;
 	ActiveCount = 0;
 	FrostedCount = 0;
-	DemoListCount = 0;
 	CurrentTimeStep = 0;
 	FighterCount = 0;
 	FreezerCount = 0;
@@ -23,13 +22,7 @@ Battle::Battle()
 	pGUI = NULL;
 }
 
-void Battle::AddtoDemoList(Enemy* Ptr)
-{
-	DemoList[DemoListCount++] = Ptr;
 
-	// Note that this function doesn't allocate any enemy objects
-	// It just enqueue a pointer that is already allocated into the queue
-}
 void Battle::AddtoActiveList(Enemy* Ptr)
 {
 	Q_Active.enqueue(Ptr);
@@ -236,9 +229,7 @@ void Battle::PrepareListsP_Q_S()
 	}
 }
 
-void Battle::PrepareFrozenPQ()
-{
-}
+
 
 void Battle::EmptyFighterList()
 {
@@ -267,9 +258,6 @@ void Battle::EmptyFreezerList()
 		Q_Freezers.dequeue(Ep);
 	}
 	FreezerCount = 0;
-}
-void Battle::EmptyFrozenList()
-{
 }
 
 void Battle::Silent_Mode()
