@@ -15,41 +15,29 @@
 class Battle
 {
 private:
-	GUI* pGUI;
-	Castle BCastle;
-	int EnemyCount;	//the actual number of enemies in the game
-	int ActiveCount, FrostedCount, KilledCount;	//no. of enemies (Active, Frosted, killed so far)
+	GUI* pGUI;														//Pointer to GUI
+	Castle BCastle;													//Castle Object
+	int EnemyCount;													//the actual number of enemies in the game
+	int ActiveCount, FrostedCount, KilledCount;						//no. of enemies (Active, Frosted, killed so far)
 	int FighterCount, HealerCount, FreezerCount;
 	int FrozenFighterCount, FrozenHealerCount, FrozenFreezerCount;
 	int KilledFighterCount, KilledHealerCount, KilledFreezerCount;
-	int CurrentTimeStep;
-	//Enemy * BEnemiesForDraw[MaxEnemyCount]; // This Array of Pointers is used for drawing elements in the GUI
-								  			// No matter what list type you are using to hold enemies, 
-											// you must pass the enemies to the GUI function as an array of enemy pointers. 
-											// At every time step, you should update those pointers 
-											// to point to the current active enemies 
-											// then pass the pointers list to the GUI function
+	int CurrentTimeStep;											//current simulation time step
 
-	Queue<Enemy*> Q_Inactive;		//Queue of inactive enemies
-	Queue<Enemy*> Q_Active;		//Queue of active enemies
 
-	PQueue<Enemy*> Q_Fighters; //Priority Queue
-	PQueue<Enemy*> Q_Frosted_List; //Priority Queue
-	Stack<Enemy*> S_Healers; //Stack if healers
-	Queue<Enemy*> Q_Freezers; //Queue of freezers
-	Queue<Enemy*> Q_Killed_List; //queue of killed enemies
-	/// ==> 
-	//	DEMO-related members. Should be removed in phases 1&2
-	//Queue for all enemies in the battle
-	int DemoListCount;
-	Enemy* DemoList[MaxEnemyCount];	//Important: This is just for demo
-	/// ==>
+	Queue<Enemy*> Q_Inactive;										//Queue of inactive enemies
+	Queue<Enemy*> Q_Active;											//Queue of active enemies
 
+	PQueue<Enemy*> Q_Fighters;										//Priority fighters Queue
+	PQueue<Enemy*> Q_Frosted_List;									//Priority Frosted Queue
+	Stack<Enemy*> S_Healers;										//Stack if healers
+	Queue<Enemy*> Q_Freezers;										//Queue of freezers
+	Queue<Enemy*> Q_Killed_List;									//queue of killed enemies
 
 	//IsGameWin
 	// TODO: Add More Data Members As Needed
-	bool IsGameWin = false;
-	bool IsGameLoss = false;
+	bool IsGameWin = false;  //True if castle killed all 
+	bool IsGameLoss = false; //True is castle died
 	//
 
 public:

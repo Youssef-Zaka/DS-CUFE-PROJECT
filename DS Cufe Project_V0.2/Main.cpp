@@ -1,25 +1,32 @@
 #include "Battle.h"
 #include "GUI\GUI.h"
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Main Function
 int main()
 {
-	
+	//Create a new instance of Battle 
 	Battle* pGameBattle = new Battle;
-	pGameBattle->RunSimulation();
+	pGameBattle->RunSimulation();  //Start the simulation and wait untill completed
 	
-	delete pGameBattle;
+	delete pGameBattle;//When simulation is ended, Delete the Battle Instance
 	
-	return 0;
-}
-
+	return 0; //Exit Program
+}////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////Some Includes used in the bellow Helper Main Functions
+///////////////Helper Main Functions include a main that tests Priority Queue
+///////////////Another that Tests 20% Castle Freeze ratio
+///////////////And finally a Random input Textfile Generator, Generated File is Called: test.txt
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////#include <iostream>	//USED IN RANDOM GENEREATION TEST
 //#include <time.h>		//USED IN RANDOM GENEREATION TEST
 //#include <chrono>		//USED IN RANDOM GENEREATION TEST
 //#include "Generic_DS/PQueue.h" //USED IN P QUEUE TEST
 //#include "Enemies/Enemy.h"	//USED IN P QUEUE TEST
-
-
+//#include <fstream>			//Used In Random Input Generator
+//#include <stdlib.h>			//Used In Random Input Generator
+//using namespace std;			//Used In Random Input Generator
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 //MAIN USED TO TEST PRIORITY QUEUE
 //RESULTS: WORKING PROPERLY, WILL MOVE ON TO IMPLEMENTING CASTLE ACTIONS
 //int main()
@@ -38,8 +45,7 @@ int main()
 //	int x;
 //	x = 1;
 //}
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 //MAIN USED TO TEST RANDOM GENERATION PERCENTAGE
 //RESULTS:
 //FROM 1000 TRIES : 19.4%
@@ -73,15 +79,10 @@ int main()
 //	auto Stop = std::chrono::high_resolution_clock::now();
 //	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(Stop - start);
 //	std::cout << "Time Taken for excution was: " << (double)duration.count()/1000000 <<"Seconds" <<std::endl;
-//	std::cout << "Percentage of Freeze from 1000000000 runs was: " << (double)(FreezeCount/NonFreezeCount)*100 << std::endl;
-//	
-//	
+//	std::cout << "Percentage of Freeze from 1000000000 runs was: " << (double)(FreezeCount/NonFreezeCount)*100 << std::endl;	
 //}
-//#include <iostream>
-//#include <fstream>
-//#include <stdlib.h>
-//using namespace std;
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////Random Input File Generator
 //int main()
 //{
 //	ofstream file("test.txt");
@@ -114,3 +115,4 @@ int main()
 //		file << rand() % 10 + 1 << endl;
 //	}
 //}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
