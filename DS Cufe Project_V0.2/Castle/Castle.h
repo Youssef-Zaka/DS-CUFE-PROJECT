@@ -20,7 +20,9 @@ class Castle
 	bool isCastleFrosted = false;
 	bool TurnToFreeze;
 	//bool HasCastleWon = false;
-
+	int Freezeind = 0;
+	double FreezeThresh = 500;
+	double CurrentThresh = 0;
 public:
 
 	void SetHealth(double h);
@@ -45,5 +47,9 @@ public:
 	void AttackActive(PQueue<Enemy*>& FighterList, Stack<Enemy*>& HealerList, Queue<Enemy*>& FreezerList, int fightercount, int healercount, int freezercount, int timestep);
 	void CalculateTurnToFreeze();
 	void DealDamage(Enemy*,int); //Responsible for damaging or freezing enemies
+	void SetFreezeind(int f); //Freeze indicator equals 1 if the castle is frozen
+	int GetFreezeind();
+	void SetCurrentThresh(double c);
+	double GetCurrentThresh(); //Current freezing threshold
 };
 

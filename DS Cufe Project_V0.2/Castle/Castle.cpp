@@ -213,3 +213,29 @@ double Castle::GetOriginalHealth()
 {
 	return OriginalHealth;
 }
+
+void Castle::SetFreezeind(int f)
+{
+	Freezeind = f;
+}
+
+int Castle::GetFreezeind()
+{
+	return Freezeind;
+}
+
+void Castle::SetCurrentThresh(double c)
+{
+	CurrentThresh = c;
+	if (CurrentThresh >= FreezeThresh)
+	{
+		Freezeind = 1; // The castle is frozen
+		CurrentThresh = 0; //The enemy freezer has no effect on the castle while it is frozen
+	}
+
+}
+
+double Castle::GetCurrentThresh() //Get the current freezing threshold
+{
+	return CurrentThresh;
+}

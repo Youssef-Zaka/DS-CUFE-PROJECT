@@ -398,7 +398,15 @@ void Battle::Step_By_Step_Mode()
 	CurrentTimeStep++;
 	ActivateEnemies();
 	UpdateEnemies();
-	BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount,CurrentTimeStep);
+	if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)
+	{
+		BCastle.SetFreezeind(0);
+		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);
+	}
+	else
+	{
+		BCastle.SetFreezeind(2);
+	}
 	PrepareActiveList();
 	pGUI->ResetDrawingList();
 	AddAllListsToDrawingList();
@@ -433,9 +441,17 @@ void Battle::InterActive_Mode()
 	{
 		CurrentTimeStep++;
 		ActivateEnemies();
-		PrepareActiveList();
 		UpdateEnemies();
-		BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);
+		if (BCastle.GetFreezeind() == 2 || BCastle.GetFreezeind() == 0)
+		{
+			BCastle.SetFreezeind(0);
+			BCastle.AttackActive(Q_Fighters, S_Healers, Q_Freezers, FighterCount, HealerCount, FreezerCount, CurrentTimeStep);
+		}
+		else
+		{
+			BCastle.SetFreezeind(2);
+		}
+		PrepareActiveList();
 		pGUI->ResetDrawingList();
 		AddAllListsToDrawingList();
 		////////////////////////////////////////////////////////////////////////////////////////////////////
