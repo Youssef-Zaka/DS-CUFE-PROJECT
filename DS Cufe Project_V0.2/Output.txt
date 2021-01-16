@@ -1,22 +1,32 @@
 Game is Loss
 KTS    ID     FD     KD     LT
-13     1      0      10     10     
-15     4      7      2      9      
+14     4      6      2      8      
 17     6      8      2      10     
-19     10     5      2      7      
-21     8      11     1      12     
-25     16     6      3      9      
-27     26     7      0      7      
-27     23     8      0      8      
-29     17     0      13     13     
-30     20     12     0      12     
-30     30     8      0      8      
-31     14     15     1      16     
-33     19     14     2      16     
-36     9      1      25     26     
-37     29     15     0      15     
+20     1      0      17     17     
+21     8      6      6      12     
+21     10     3      6      9      
+23     16     3      4      7      
+24     13     9      0      9      
+25     23     6      0      6      
+26     17     2      8      10     
+26     14     7      4      11     
+27     26     6      1      7      
+29     20     10     1      11     
+31     31     6      3      9      
+32     29     10     0      10     
+32     30     5      5      10     
+35     18     16     2      18     
+36     19     16     3      19     
+36     2      0      32     32     
+38     36     11     1      12     
+39     37     10     2      12     
+41     34     16     0      16     
+43     48     5      3      8      
+44     12     25     5      30     
+46     3      0      42     42     
+48     43     14     1      15     
 Castle Total Damage = 233
-Total Killed Enemies = 15
-Total Alive Enemies = 35
-Average First-Shot delay for killed enemies = 7.8
-Average Kill Delay for killed enemies = 4.06667
+Total Killed Enemies = 25
+Total Alive Enemies = 25
+Average First-Shot delay for killed enemies = 8
+Average Kill Delay for killed enemies = 6
